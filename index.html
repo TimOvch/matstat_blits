@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Теория вероятностей — Карточки</title>
+  <title>Математическая статистика — Карточки</title>
 
-  <!-- Включаем поддержку $...$ -->
   <script>
     MathJax = {
       tex: {
@@ -40,10 +39,10 @@
       text-align: center;
     }
     .question { font-size: 1.2em; margin-bottom: 16px; }
-    .progress { 
-      color: #666; 
-      font-size: 0.95em; 
-      margin-bottom: 12px; 
+    .progress {
+      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 12px;
       font-weight: 500;
     }
     .answer {
@@ -52,6 +51,7 @@
       padding-top: 16px;
       border-top: 1px dashed #ddd;
       color: #0066cc;
+      text-align: left;
     }
     button {
       background: #007aff;
@@ -67,35 +67,24 @@
     button.incorrect { background: #ff3b30; }
     .topic-btn { background: #5e5ce6; }
     .summary { font-size: 1.2em; margin: 20px 0; }
-    /* Анимация пуляющей какашки */
-.poop {
-  position: fixed;
-  font-size: 2em;
-  z-index: 1000;
-  pointer-events: none;
-  animation: poopFly 5s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
-}
-@keyframes poopFly {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(100px, -150px) rotate(360deg);
-  }
-  100% {
-    transform: translate(200px, -300px) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-/* Анимация появления/исчезновения сообщения */
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  80% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-}
+    .poop {
+      position: fixed;
+      font-size: 2em;
+      z-index: 1000;
+      pointer-events: none;
+      animation: poopFly 5s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+    }
+    @keyframes poopFly {
+      0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+      50%  { transform: translate(100px, -150px) rotate(360deg); }
+      100% { transform: translate(200px, -300px) rotate(720deg); opacity: 0; }
+    }
+    @keyframes fadeInOut {
+      0%   { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      20%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+      80%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    }
   </style>
 </head>
 <body>
@@ -104,13 +93,13 @@
 <div id="screen-select" class="screen active">
   <h2>Выбери тему</h2>
   <button class="topic-btn" onclick="startSession('all')">Все карточки</button>
-  <button class="topic-btn" onclick="startSession('Модель вероятностного эксперимента')">Модель вероятностного эксперимента</button>
-  <button class="topic-btn" onclick="startSession('Случайные величины и векторы')">Случайные величины и векторы</button>
-  <button class="topic-btn" onclick="startSession('Последовательности случайных величин и предельные теоремы')">Последовательности случайных величин и предельные теоремы</button>
-  <button class="topic-btn" onclick="startSession('Особые знания')">Особые знания</button>
+  <button class="topic-btn" onclick="startSession('Точечное оценивание')">Точечное оценивание</button>
+  <button class="topic-btn" onclick="startSession('Доверительное оценивание')">Доверительное оценивание</button>
+  <button class="topic-btn" onclick="startSession('Проверка гипотез')">Проверка гипотез</button>
+  <button class="topic-btn" onclick="startSession('Линейная регрессия')">Линейная регрессия</button>
+  <button class="topic-btn" onclick="startSession('Дисперсионный анализ (ANOVA)')">Дисперсионный анализ (ANOVA)</button>
   <button class="topic-btn" onclick="showScreen('screen-all-cards')">Просмотреть все карточки</button>
 </div>
-
 
 <!-- Экран карточки -->
 <div id="screen-card" class="screen">
@@ -135,8 +124,6 @@
 <div id="screen-all-cards" class="screen">
   <h2>Все карточки</h2>
   <button onclick="showScreen('screen-select')" style="margin-bottom: 20px;">← Назад к выбору темы</button>
-
-  <!-- Генерация всех карточек -->
   <div id="all-cards-container"></div>
 </div>
 
@@ -144,40 +131,30 @@
 function renderAllCards() {
   const container = document.getElementById('all-cards-container');
   container.innerHTML = '';
-
   for (const [topic, cards] of Object.entries(cardGroups)) {
-    if (topic === 'all') continue; // Пропускаем служебную группу
-
+    if (topic === 'all') continue;
     const topicHeader = document.createElement('h3');
     topicHeader.textContent = topic;
     topicHeader.style.marginTop = '32px';
     topicHeader.style.color = '#5e5ce6';
     container.appendChild(topicHeader);
-
     cards.forEach(card => {
       const cardEl = document.createElement('div');
       cardEl.className = 'card';
-
       const qEl = document.createElement('div');
       qEl.className = 'question';
       qEl.textContent = card.q;
-
       const aEl = document.createElement('div');
       aEl.className = 'answer';
       aEl.innerHTML = card.a;
-      aEl.style.display = 'block'; // Показываем сразу
-
+      aEl.style.display = 'block';
       cardEl.appendChild(qEl);
       cardEl.appendChild(aEl);
       container.appendChild(cardEl);
     });
   }
-
-  // Запускаем рендеринг формул после добавления контента
   MathJax.typesetPromise();
 }
-
-// Автоматически рендерим при переходе на экран
 document.addEventListener('click', (e) => {
   if (e.target.matches('[onclick*="screen-all-cards"]')) {
     setTimeout(renderAllCards, 100);
@@ -188,257 +165,113 @@ document.addEventListener('click', (e) => {
 <script>
   // === КАРТОЧКИ ПО ТЕМАМ ===
   const cardGroups = {
-    "Модель вероятностного эксперимента": [
+    "Точечное оценивание": [
       {
-        q: "1. Определение вероятностного эксперимента и аксиомы вероятности",
-        a: "<strong>Вероятностный эксперимент</strong> - тройка $(\\Omega, \\mathcal{F}, P)$, удовлетворяющая трём аксиомам событий и трём аксиомам вероятности.<br><br>$\\Omega$ - множество исходов<br>$\\mathcal{F}$ - множество событий (сигма-алгебра над множеством исходов)<br>$P$ - вероятность (неотрицательная счетно-аддитивная функция событий)<br><br><strong>Аксиомы событий:</strong><br>1. $\\emptyset\\in\\mathcal{F}$<br>2. $\\forall A,B\\in\\mathcal{F}\\Rightarrow A\\cup B\\in\\mathcal{F}, A\\setminus B\\in\\mathcal{F}, (A\\cap B\\in\\mathcal{F})$<br>3. $\\forall A_{1},A_{2},\\dots\\in\\mathcal{F}\\Rightarrow\\bigcup_{i=1}^{\\infty}A_{i}\\in\\mathcal{F}$<br><br><strong>Аксиомы вероятности:</strong><br>1. $P(\\Omega)=1 (\\forall A \\in \\mathcal{F}:P(A)\\in[0,1])$<br>2. $\\forall A,B \\in \\mathcal{F}:A\\cap B=\\emptyset\\Rightarrow\\mathbb{P}(A\\cup B)=P(A)+P(B)$<br>3. $\\forall A_{1},A_{2}, \\dots\\in \\mathcal{F},\\forall i\\neq j: A_{i}\\cap A_{j}=\\emptyset\\Rightarrow P(\\bigcup_{i=1}^{\\infty}A_{i})=\\sum\\limits_{i=1}^{\\infty}P(A_{i})$"
+        q: "1. Эмпирическая функция распределения. Теоремы Гливенко–Кантелли и Колмогорова",
+        a: "<strong>TL;DR:</strong> $F_n(x) = \\frac{1}{n}\\sum 1\\{X_i &lt; x\\}$ — несмещённая оценка $F$; равномерно сходится к $F$ п.н.; $\\sqrt{n}D_n \\Rightarrow K$.<br><br><strong>Формально:</strong><br><strong>Эмпирическая ФР:</strong> $$F_n(x) = \\frac{1}{n}\\sum_{i=1}^n 1\\{X_i &lt; x\\},$$ где $1_A = 1$, если $A$ выполнено, и $0$ иначе.<br><strong>Теорема (Гливенко–Кантелли).</strong> Пусть $X_1, \\ldots, X_n$ — выборка из распределения $P_\\theta$; $F(x)$ и $F_n(x)$ — теоретическая и эмпирическая ФР. Тогда с вероятностью 1 $$\\lim_{n\\to\\infty} D_n(X) = \\lim_{n\\to\\infty} \\sup_{x} |F_n(x) - F(x)| \\to 0.$$<strong>Теорема (Колмогоров).</strong> Если $F(x)$ непрерывна, то для любого $t &gt; 0$ $$\\lim_{n\\to\\infty} \\mathbb{P}(\\sqrt{n} D_n \\leq t) = K(t) = \\sum_{j=-\\infty}^{\\infty} (-1)^j e^{-2j^2 t^2}.$$ Функция $K(t)$ — <em>функция распределения Колмогорова</em>. Статистика $D_n = \\sup_x|F_n(x)-F(x)|$ — <em>статистика Колмогорова</em>."
       },
       {
-        q: "2. В чем заключается классическое определение вероятности",
-        a: "<strong>Классическое определение вероятности</strong><br>- $\\Omega=\\{\\omega_{1},\\dots,\\omega_n\\}$ - конечное множество<br>- $\\mathcal{F}$ - множество всех подмножеств $\\Omega$<br>- $P(A)=\\frac{\\#A}{\\#\\Omega}$<br><br><strong>Основной постулат применимости</strong> - элементартные непустые события равновозможны (то есть все события состоящие из одного элемента $\\Omega$ имеют равную вероятность)"
+        q: "2. Выборочные числовые характеристики: выборочное среднее, дисперсия, медиана, квантиль",
+        a: "<strong>TL;DR:</strong> Принцип подстановки: $\\alpha(F_n)$ вместо $\\alpha(F)$. Для I типа — функция от моментов, для II типа — непрерывный функционал.<br><br><strong>Формально:</strong><br>Выборочные характеристики (принцип подстановки $F \\to F_n$):<br>— Мат. ожидание: $\\bar X = \\frac{1}{n}\\sum_{i=1}^n X_i$<br>— Дисперсия: $s^2 = \\overline{X^2} - \\bar X^2 = \\frac{1}{n}\\sum_{i=1}^n (X_i - \\bar X)^2$<br>— $p$-квантиль: $Z_{n,p} = X_{([np]+1)}$ при $np\\notin\\mathbb{Z}$; $[X_{(np)}, X_{(np+1)}]$ при $np\\in\\mathbb{Z}$.<br><strong>Теорема (состоятельность).</strong> Если $\\alpha(F)$ — характеристика I или II типа, то с вероятностью 1 $$\\alpha(F_n) \\xrightarrow[n\\to\\infty]{} \\alpha(F).$$<strong>Асимптотическая нормальность (I тип):</strong> при условиях $(i)$ $E_F|g_i(X)|^2 &lt; \\infty$, $(ii)$ $H$ непрерывно дифференцируема: $$\\sqrt{n}(\\alpha(F_n) - \\alpha(F)) \\Rightarrow \\mathcal{N}(0, \\sigma_\\alpha^2).$$"
       },
       {
-        q: "3. В чем заключается геометрическое определение вероятности",
-        a: "<strong>Геометрическое определение вероятности</strong><br>- $\\Omega\\in\\mathcal{B}_{d}: 0 < V_{d}(\\Omega) < \\infty$ - подмножество $R^{d}$<br>- $\\mathcal{F}=\\Omega\\cap\\mathcal{B}_{d}$ - пересечения борелевских множеств с $\\Omega$<br>- $P(A)=\\frac{V_{d}(A)}{V_{d}(\\Omega)}$<br><br><strong>Основной постулат применимости</strong> - точка, наугад брошена в множество $\\Omega$, если вероятность её попадания в любое борелевское подмножество $A$ множества $\\Omega$ не зависит от его формы и местоположения, а только от объема."
+        q: "3. Непараметрические оценки плотности: гистограмма и ядерная оценка",
+        a: "<strong>TL;DR:</strong> Гистограмма: $H(x) = \\nu_j/(nh)$ на интервале $I_j$; оптимальный шаг $h_\\text{opt} \\sim n^{-1/3}$. Ядерная оценка сглаживает горбиком $K$.<br><br><strong>Формально:</strong><br><strong>Гистограмма (абсолютно непрерывный случай).</strong> Прямую разбивают на интервалы $\\{I_j\\}$ длины $h &gt; 0$; $\\nu_j$ — число наблюдений в $j$-м интервале. Функция $$H(x) = \\frac{\\nu_j}{nh},\\quad x\\in I_j$$ называется <em>гистограммой</em>. Площадь под $H$ равна 1.<br>Граница среднеквадратичной ошибки: $$E_F(H(x;h) - p(x))^2 \\leq d^2 h^2 + \\frac{p_{\\max}}{nh} + \\frac{p_{\\max}^2}{n},$$ откуда $h_\\text{opt} = (p_{\\max}/(nd^2))^{1/3}$.<br><strong>Ядерная оценка плотности:</strong> $$f_n(x) = (nh_n)^{-1}\\sum_{i=1}^n K\\!\\left(\\frac{x - X_i}{h_n}\\right),$$ где $K$ — неотрицательная функция ограниченной вариации (ядро), обычно симметричная."
       },
       {
-        q: "4. Определение независимости пары событий A и B",
-        a: "<strong>Независимые события</strong><br>События $A$ и $B$ независимы, если $P(AB)=P(A)P(B)$"
+        q: "4. Распределения χ², Стьюдента, Фишера–Снедекора. Лемма Фишера",
+        a: "<strong>TL;DR:</strong> $\\chi^2_n = \\sum\\xi_i^2$; $S_n = \\xi_0/\\sqrt{\\chi^2_n/n}$; $F_{n,m} = (\\chi^2_n/n)/(\\chi^2_m/m)$. Лемма Фишера: $\\bar X$ и $s^2$ независимы, $ns^2/\\sigma^2 \\sim \\chi^2_{n-1}$.<br><br><strong>Формально:</strong><br>Пусть $\\xi_0, \\xi_1, \\ldots, \\xi_n \\sim \\mathcal{N}(0,1)$ независимы. Тогда:<br>— $\\chi_n^2 = \\sum_{i=1}^n \\xi_i^2$ — <em>хи-квадрат с $n$ степенями свободы</em>;<br>— $S_n = \\xi_0/\\sqrt{\\chi_n^2/n}$ — <em>распределение Стьюдента с $n$ ст.св.</em>;<br>— $F_{n,m} = (\\chi_n^2/n)/(\\chi_m^2/m)$ — <em>распределение Фишера–Снедекора</em>.<br><strong>Теорема (Лемма Фишера).</strong> Пусть $X_1, \\ldots, X_n$ — выборка из $\\mathcal{N}(a,\\sigma^2)$. Тогда:<br>$(i)$ $\\sqrt{n}(\\bar X - a)/\\sigma \\in \\mathcal{N}(0,1)$;<br>$(ii)$ $\\bar X$ и $s^2$ — независимые статистики;<br>$(iii)$ $ns^2/\\sigma^2 \\sim \\chi^2_{n-1}$;<br>$(iv)$ $\\sqrt{n-1}(\\bar X - a)/s \\sim S_{n-1}$."
       },
       {
-        q: "5. Что называется условной вероятностью события A при условии B (формула)",
-        a: "<strong>Условная вероятность</strong><br>Условной вероятностью события $A$ при условии $B$ называется $$P(A|B)=\\frac{P(AB)}{P(B)},\\qquad P(B)>0$$"
+        q: "5. Функция правдоподобия и оценка максимального правдоподобия",
+        a: "<strong>TL;DR:</strong> $L(x;\\theta) = p_\\theta(x)$ — функция от $\\theta$ при фиксированном $x$; ОМП = максимум $L$; ОМП инвариантна.<br><br><strong>Формально:</strong><br><strong>Функция правдоподобия</strong> $L : \\mathfrak{X}\\times\\Theta\\to\\mathbb{R}_+$: $$L(x;\\theta) = p_\\theta(x),\\quad x\\in\\mathfrak{X},\\ \\theta\\in\\Theta.$$ Для выборки $X_1,\\ldots,X_n$: $L(X;\\theta) = \\prod_{i=1}^n p_\\theta(X_i)$; лог-правдоподобие: $LL(X;\\theta) = \\sum_{i=1}^n \\log p_\\theta(X_i)$.<br><strong>Определение.</strong> Оценка $\\hat\\theta(X)$, максимизирующая $L(X;\\theta)$ по $\\theta$, называется <em>оценкой максимального правдоподобия (ОМП)</em>. ОМП находится из уравнения правдоподобия: $$U(X;\\theta) = \\frac{\\partial}{\\partial\\theta}\\log L(X;\\theta) = 0.$$ <strong>Свойство инвариантности:</strong> если $\\hat\\theta$ — ОМП параметра $\\theta$, то $g(\\hat\\theta)$ — ОМП для $g(\\theta)$."
       },
       {
-        q: "6. В каком случае события A1,...,An называются независимыми в совокупности",
-        a: "<strong>Независимость в совокупности</strong><br>События $A_{1},\\dots,A_{n}$ независимы в совокупности, если для любого сочетания индексов $1\\leq i_{1} < \\dots < i_{s}\\leq n, s=2,\\dots,n$$$P(A_{i_1}\\dots A_{i_s})=P(A_{i_1})\\dots P(A_{i_s})$$"
+        q: "6. Регулярный эксперимент, информация Фишера, неравенство Рао–Крамера",
+        a: "<strong>TL;DR:</strong> Регулярность — (i)(ii)(iii). $I(\\theta) = E_\\theta U^2 = -E_\\theta \\partial^2_\\theta \\log L$. Для несмещённой оценки $D_\\theta\\delta \\geq 1/I(\\theta)$.<br><br><strong>Формально:</strong><br><strong>Определение.</strong> Эксперимент <em>регулярный</em>, если при каждом $\\theta\\in\\Theta$: $(i)$ $L(x;\\theta)$ непрерывна и непрерывно дифференцируема по $\\theta$; $(ii)$ $\\int_\\mathfrak{X} \\frac{\\partial}{\\partial\\theta}p_\\theta(x)\\,d\\mu = 0$ (дифф. под интегралом); $(iii)$ $0 &lt; I(\\theta) = E_\\theta(U(X;\\theta))^2 &lt; \\infty$, где $U(x;\\theta) = \\frac{\\partial}{\\partial\\theta}\\log L(x;\\theta)$ — <em>скоринговая функция</em>; $I(\\theta)$ — <em>информация Фишера</em>.<br>Аддитивность: для выборки $I_n(\\theta) = nI_1(\\theta)$.<br><strong>Теорема (Неравенство Рао–Крамера).</strong> Пусть эксперимент регулярен, $\\delta$ — разрешённая оценка. Тогда $$D_\\theta\\delta \\geq \\frac{(1+b'(\\theta))^2}{I(\\theta)},$$ где $b(\\theta) = E_\\theta\\delta - \\theta$ — смещение. Для несмещённой: $D_\\theta\\delta \\geq 1/I(\\theta)$."
       },
       {
-        q: "7. Формула полной вероятности",
-        a: "<strong>Полная вероятность</strong><br>Пусть $\\{H_{i}\\}_{i=1}^{n}$ - ПГС; $A\\in\\mathcal{F}$ - произвольное событие, тогда: $$P(A)=\\sum\\limits_{i=1}^{n}P(A|H_{i})P(H_{i})$$"
-      },
-      {
-        q: "8. Формулы Байеса",
-        a: "<strong>Формулы байеса</strong><br>Пусть $\\{H_{i}\\}_{i=1}^{n}$ - ПГС; $A\\in\\mathcal{F}$ - произвольное событие, тогда: $$P(H_j|A)=\\frac{P(A|H_j)P(H_j)}{\\sum\\limits_{i=1}^{n}P(A|H_{i})P(H_{i})}, \\qquad j=1,\\dots,n$$"
-      },
-      {
-        q: "9. Что такое испытания Бернулли и Формула Бернулли",
-        a: "<strong>Испытание</strong> - вер. эксперимент с двумя исходами: успех, неудача<br><br><strong>Испытания Бернулли</strong> - совокупность независимых испытаний с одинаковой вероятностью успеха<br><br>Обозначения<br>- $p=P(\\text{успех})$<br>- $\\mu_{n}$ - число успехов в $n$ испытаниях Бернулли<br>- $\\nu_{k}$ число успехов до $k$-й неудачи (при её наличии)<br><br><strong>Формула Бернулли</strong><br>$$P(\\mu_{n}=k)=C_{n}^{k}\\cdot p^{k}\\cdot (1-p)^{n-k}$$"
-      },
-      {
-        q: "10. Локальная теорема Муавра-Лапласа и как ее применять",
-        a: "<strong>Локальная теорема Муавра-Лапласа</strong><br>В схеме Муавра-Лапласа при любом фиксированном $M>0$:$$\\sup_{k:|x_{k}|\\leq M}\\left|\\sqrt{np(1-p)}P_{n}(\\mu_{n}=k)-\\frac{1}{\\sqrt{2\\pi}}\\exp(\\frac{-x_{k}^{2}}{2}) \\right|\\underset{n\\to\\infty}{\\to}0$$<br>- $\\large\\displaystyle x_{k}=\\frac{k-np}{\\sqrt{np(1-p)}}$<br><br>Ну по сути говоря, если мы хотим найти вероятность $k$ успехов, при $n$ испытаниях, нам нужно взять то что после минуса, поделить на $\\sqrt{np(1-p)}$ и мы получим эту вероятность (если конечно серия экспериментов удовлетворяет условиям применения схемы Муавра-Лапласа)"
-      },
-      {
-        q: "11. Интегральная теорема Муавра-Лапласа и как ее применять",
-        a: "<strong>Интегральная теорема Муавра-Лапласа</strong><br>В схеме Муавра-Лапласа<br>$$\\sup_{-\\infty < a < b < \\infty}\\left|P\\left(a\\leq\\frac{\\mu_{n}-np}{\\sqrt{np(1-p)}} \\leq b\\right)-\\int\\limits_{a}^{b}\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{t^{2}}{2}}dt\\right|\\underset{n\\to\\infty}{\\rightarrow}0$$<br><br>Есть у нас серия $n$ экспериментов и нам интересно с какой вероятностью число успехов будет лежать в интервале от $a$ до $b$ включительно. <br><br>Далее стандартизуем границы (вычитаем из них $np$ и делим на $\\sqrt{np(1-p)}$) и делаем функция Лапласа от правой границы минус функция лапласа от левой - получаем вероятность.<br><br>Функция Лапласа: $\\Phi(x)=\\int_{-\\infty}^{x}\\frac{1}{\\sqrt{2\\pi}}e^{\\frac{-t^{2}}{2}}dt$   ($\\Phi^{*}(x)=\\int_{0}^{x}\\frac{1}{\\sqrt{2\\pi}}e^{\\frac{-t^{2}}{2}}dt$)"
-      },
-      {
-        q: "12. Теорема Пуассона и как ее применять",
-        a: "<strong>Теорема Пуассона</strong><br>В схеме Пуассона при любом фиксированном $k$:$$P_{n}(\\mu_{n}=k)\\underset{n\\to\\infty}{\\to}\\frac{\\lambda^{k}}{k!}e^{-\\lambda}$$<br><br>Если серия из $n$ экспериментов подходит под схему лапласа ($np\\leq10$) и нам интересно узнать вероятность $k$ успехов подставляем $k$ и $\\lambda$ в формулу ($\\lambda=np$)"
+        q: "7. Теорема об асимптотической нормальности оценки максимального правдоподобия",
+        a: "<strong>TL;DR:</strong> В условиях регулярности и состоятельности ОМП: $\\sqrt{n}(\\hat\\theta - \\theta) \\Rightarrow \\mathcal{N}(0, I(\\theta)^{-1})$ — ОМП асимптотически эффективна.<br><br><strong>Формально:</strong><br><strong>Теорема (Асимптотическая нормальность ОМП).</strong> Пусть $X = (X_1, \\ldots, X_n)$ — выборка из регулярного семейства; $(i)$ выполнено условие двукратной дифференцируемости плотности под знаком интеграла; $(ii)$ $\\mathbb{I}(\\theta) = nI(\\theta)$ — информационная матрица; $(iii)$ ОМП $\\hat\\theta$ состоятельна. Тогда $$n^{1/2}(\\hat\\theta - \\theta) \\Rightarrow \\mathcal{N}(0, I(\\theta)^{-1}).$$ В условиях теоремы ОМП является <em>асимптотически эффективной</em> (предельная дисперсия достигает нижней границы Рао–Крамера).<br><em>Идея:</em> ЦПТ для скоринга $n^{-1/2}U(X;\\theta) \\Rightarrow \\mathcal{N}(0, I(\\theta))$ + разложение Тейлора $U(\\hat\\theta) = 0$: $n^{1/2}(\\hat\\theta-\\theta) \\approx I^{-1}\\cdot n^{-1/2}U$."
       }
     ],
-    "Случайные величины и векторы": [
+    "Доверительное оценивание": [
       {
-        q: "13. Что называется случайной величиной",
-        a: "<strong>Случайная величина</strong> - это измеримое отображение из множества исходов в множество вещественных чисел ($\\xi:\\Omega\\to\\mathbb{R}$)."
+        q: "8. Доверительное множество и интервал. Метод построения через генератор",
+        a: "<strong>TL;DR:</strong> ДИ — статистика $[T_1, T_2]$ накрывающая $\\theta$ с вероятностью $\\geq 1-\\alpha$; строится через генератор $G(X,\\theta)$ с распределением, не зависящим от $\\theta$.<br><br><strong>Формально:</strong><br><strong>Определение.</strong> Статистика $\\hat\\Theta : \\mathfrak{X}\\to\\mathbb{R}^2$ такая, что $$P_\\theta(\\theta\\in[T_1(X), T_2(X)]) \\geq 1 - \\alpha\\quad \\text{при любом}\\quad\\theta\\in\\Theta,$$ называется <em>доверительным интервалом</em> параметра $\\theta$ уровня доверия $1-\\alpha$.<br><strong>Метод генератора.</strong> Пусть $G(X,\\theta)$ — функция параметра и наблюдений, такая что: (1) распределение $G(X,\\theta)$ не зависит от $\\theta$; (2) $\\exists I_\\alpha : P_\\theta(G(X,\\theta)\\in I_\\alpha) \\geq 1-\\alpha$ и $\\hat\\Theta = \\{\\theta : G(X,\\theta)\\in I_\\alpha\\}$ — интервал. Тогда $\\hat\\Theta$ — ДИ уровня $1-\\alpha$. Функция $G(X,\\theta)$ называется <em>генератором</em> доверительного интервала."
       },
       {
-        q: "14. Что называется функцией распределения случайной величины, выписать четыре свойства функции распределения",
-        a: "Функция распределения случайной величины $\\xi$ - измеримая функция  $F_{\\xi}:\\mathbb{R}\\to[0,1]$, которая выдает вероятность того, что случайная величина будет меньше заданного числа $$F_{\\xi}(x)=P(\\xi&lt;x)=P((-\\infty,x))$$<br><br>Свойства:<br>1. <strong>ПРЕДЕЛЫ</strong> $\\lim_{x\\to\\infty}F_{\\xi}(x)=1,\\quad \\lim_{x\\to-\\infty}F_{\\xi}(x)=0$<br>2. <strong>НЕПРЕРЫВНОСТЬ СЛЕВА</strong> $F_{\\xi}(x_{0-})=\\lim_{x\\to x_{0-}}F_{\\xi}(x)=F_{\\xi}(x_{0}),\\forall x_{0}\\in\\mathbb{R}$<br>3. <strong>НЕ УБЫВАЕТ</strong> (НИ ШАГУ ВПЕРЕД)  $\\forall x,y\\in\\mathbb{R}:x\\leq y\\Rightarrow F_{\\xi}(x)\\leq F_{\\xi}(y)$<br>4. <strong>СУЩЕСТВУЕТ ПРЕДЕЛ СПРАВА</strong> $\\forall x_{0}\\in\\mathbb{R}:\\exists F_{\\xi}(x_{0+})=\\lim_{x\\to x_{0+}}F_{\\xi}(x)$"
+        q: "9. Доверительные интервалы для среднего и дисперсии нормального распределения",
+        a: "<strong>TL;DR:</strong> Для $a$: генератор $\\sqrt{n-1}(\\bar X - a)/s \\sim S_{n-1}$, ДИ $\\bar X \\pm t_\\alpha s/\\sqrt{n-1}$. Для $\\sigma^2$: генератор $ns^2/\\sigma^2 \\sim \\chi^2_{n-1}$, ДИ $[ns^2/x_{2,\\alpha},\\, ns^2/x_{1,\\alpha}]$.<br><br><strong>Формально:</strong><br>Пусть $X_1,\\ldots,X_n$ — выборка из $\\mathcal{N}(a,\\sigma^2)$.<br><strong>ДИ для $a$ (уровень $1-\\alpha$):</strong> используем $G = \\sqrt{n-1}(\\bar X - a)/s \\sim S_{n-1}$ (лемма Фишера, п.4); $t_\\alpha : S_{n-1}(t_\\alpha) = 1-\\alpha/2$. ДИ: $$[\\bar X - t_\\alpha s/\\sqrt{n-1},\\ \\bar X + t_\\alpha s/\\sqrt{n-1}].$$<strong>ДИ для $\\sigma^2$ (уровень $1-\\alpha$):</strong> используем $G = ns^2/\\sigma^2 \\sim \\chi^2_{n-1}$ (лемма Фишера, п.3); $x_{1,\\alpha}, x_{2,\\alpha} : K_{n-1}(x_{1,\\alpha}) = \\alpha/2$, $K_{n-1}(x_{2,\\alpha}) = 1-\\alpha/2$. ДИ: $$[ns^2/x_{2,\\alpha},\\ ns^2/x_{1,\\alpha}].$$"
       },
       {
-        q: "15. Какие случайные величины называются дискретными, непрерывными, абс. непрерывными",
-        a: "Дискретные случайные величины - у которых носитель не более чем счетный (либо существует не более чем счетное множество, вероятность попадание $\\xi$  в которое равна 1)<br><br>Непрерывные случайные величины - если $F_{\\xi}$ непрерывна<br><br>Абсолютно непрерывные случайные величины - те, у которых есть существует плотность (неотрицательная измеримая функция; определение плотности - функция распределения = интегралу по плотности от - бесконечности до $x$)"
+        q: "10. Асимптотический доверительный интервал на основе асимптотически нормальной оценки",
+        a: "<strong>TL;DR:</strong> Если $\\sqrt{n}(\\hat\\theta - \\theta) \\Rightarrow \\mathcal{N}(0,\\sigma^2(\\theta))$ и $\\sigma^2(\\hat\\theta)$ состоятельна, то АДИ: $\\hat\\theta \\pm x_{\\alpha/2}\\sigma(\\hat\\theta)/\\sqrt{n}$.<br><br><strong>Формально:</strong><br><strong>Определение.</strong> Статистика $\\hat\\Theta_n = [T_{1n}(X), T_{2n}(X)]$, удовлетворяющая $$\\lim_{n\\to\\infty}P_\\theta(\\theta\\in[T_{1n}, T_{2n}]) \\geq 1-\\alpha\\quad \\forall\\theta,$$ называется <em>асимптотическим доверительным интервалом (АДИ)</em>.<br><strong>Метод на базе АН-оценки.</strong> Из $\\sqrt{n}(\\hat\\theta - \\theta) \\Rightarrow \\mathcal{N}(0, \\sigma^2(\\theta))$ и состоятельности $\\sigma(\\hat\\theta) \\to \\sigma(\\theta)$: $$\\frac{\\sqrt{n}(\\hat\\theta - \\theta)}{\\sigma(\\hat\\theta)} \\Rightarrow \\mathcal{N}(0,1).$$ Выбираем $x_{\\alpha/2} : \\Phi(x_{\\alpha/2}) = 1-\\alpha/2$. АДИ: $$[\\hat\\theta - x_{\\alpha/2}\\sigma(\\hat\\theta)/\\sqrt{n},\\ \\hat\\theta + x_{\\alpha/2}\\sigma(\\hat\\theta)/\\sqrt{n}].$$<strong>На базе ОМП:</strong> $\\sigma^2(\\theta) = 1/I(\\theta)$, АДИ: $[\\hat\\theta \\pm x_{\\alpha/2}/\\sqrt{nI(\\hat\\theta)}]$."
       },
       {
-        q: "16. Что называется плотностью распределения, свойства плотности распределения",
-        a: "Плотность - неотрицательная измеримая функция. Определяется через $$F_{\\xi}=\\int\\limits_{-\\infty}^{x}p_{\\xi}(t)dt$$<br>Свойства:<br>1. $p_{\\xi}(x)\\geq0$ п. в. $x$<br>2. $\\int\\limits_{-\\infty}^{\\infty}p_{\\xi}(t)dt=1$<br>3. $P(\\xi\\in A)=\\int_{A}p_{\\xi}(x)dx, \\quad \\forall A\\in\\mathcal{B}_{1}$ => $P(\\xi =x)=0$   и $P(\\xi\\in I_{ab})=\\int_{a}^{b}p_{\\xi}(x)dx$ (где $I_{ab}$ - любой интервал)<br>4. $\\text{supp}(\\xi)=\\{x\\in\\mathbb{R}:p_{\\xi}(x)&gt;0 \\}$ - носитель определяется как множество значений, где плотность больше 0<br>5. $D=\\{x\\in\\mathbb{R}:\\exists F_{\\xi}'(x) \\}$ - множество точек дифференцируемости $F_{\\xi}(x)$ и $\\int_{D}F_{\\xi}(x)'dx=1$ => величина абсолютно непрерывная и $p_{\\xi}(x)=F_{\\xi}'(x), x\\in D$"
-      },
-      {
-        q: "17. Формулы, связывающие плотность распределения и функцию распределения",
-        a: "$$F_{\\xi}=\\int\\limits_{-\\infty}^{x}p_{\\xi}(t)dt\\qquad p_{\\xi}(x)=F_{\\xi}'(x)$$"
-      },
-      {
-        q: "18. Что называется функцией распределения случайного вектора",
-        a: "$$F_{\\overline{\\xi}}:\\mathbb{R}^{n}\\to[0,1]\\qquad F_{\\overline{\\xi}}(\\overline{x})=P(\\xi_{1} &lt; x_{1},\\dots,\\xi_{n}&lt;x_{n})$$"
-      },
-      {
-        q: "19. Какие случайные вектора называются дискретными, непрерывными, абсолютно-непрерывными",
-        a: "Дискретный случайный вектор - если $\\exists A$ - не более чем счетное множество $n$-мерных векторов, для которого $P(\\overline{\\xi}\\in A)=1$<br><br>Непрерывный - если функция распределения непрерывна<br><br>Абсолютно непрерывный - если существует плотность $$F_{\\overline{\\xi}}(\\overline{x})=\\int_{-\\infty}^{x_{1}}\\dots\\int_{-\\infty}^{x_{n}}p_{\\overline{\\xi}}(\\overline{t})dt_{1}\\dots dt_n$$"
-      },
-      {
-        q: "20. Что называются плотностью распределения случайного вектора и ее свойства",
-        a: "Плотность определяется так<br>$$F_{\\overline{\\xi}}(\\overline{x})=\\int_{-\\infty}^{x_{1}}\\dots\\int_{-\\infty}^{x_{n}}p_{\\overline{\\xi}}(\\overline{t})dt_{1}\\dots dt_n$$<br><br>1. $p_{\\overline{\\xi}}(\\overline{x})\\geq0$ п. в. $x$<br>2. $\\int_{\\mathbb{R}^{n}}p_{\\overline{\\xi}}(\\overline{t})dt_{1}\\dots t_{n}=1$<br>3. $P(\\overline{\\xi}\\in A)=\\int_{A}p_{\\overline{\\xi}}(\\overline{x})dx_{1}\\dots dx_{n}, \\quad \\forall A\\in\\mathcal{B}_{n}$ => $P(\\overline{\\xi}=\\overline{x})=0$   и $P(\\overline{\\xi}\\in \\overline{I}_{ab})=\\int_{a_{1}}^{b_{1}}p_{\\overline{\\xi}}(\\overline{x})dx_{1}\\dots dx_{n}$ (где $\\overline{I}_{ab}=I_{a_{1}b_{1}}\\times\\dots\\times I_{a_{n}b_{n}}$, где $I_{a_{i}b_{i}}$ - любой интервал)<br>4. $\\text{supp}(\\overline{\\xi})=\\{\\overline{x}\\in\\mathbb{R}^{n}:p_{\\overline{\\xi}}(\\overline{x})&gt;0 \\}$ - носитель определяется как множество значений, где плотность больше 0<br>5. $D=\\{\\overline{x}\\in\\mathbb{R}:\\exists F_{\\overline{\\xi}}^{(n)}(\\overline{x}) \\}$ - мн-во всех точек, в которых существуют все (непрерывные) частные производные до $n$-ого порядка включительно и $\\displaystyle \\int_{D}\\frac{\\delta^{n}F(\\overline{x})}{\\delta x_{1}\\dots \\delta x_{n}} dx_{1}\\dots dx_{n}$<br>\t1. => величина абсолютно непрерывная<br>\t2. => $\\displaystyle p_{\\overline{\\xi}}(\\overline{x})=\\begin{cases}\\frac{\\delta^{n}F(\\overline{x})}{\\delta x_{1}\\dots \\delta x_{n}},\\quad \\overline{x}\\in D\\\\ 0, \\quad \\text{иначе}\\end{cases}$ - версия плотности"
-      },
-      {
-        q: "21. Какие случайные величины называются независимыми",
-        a: "Есть $\\overline{\\xi}$ - случайный вектор.<br><br>Его компоненты независимы, если $\\forall A_{1},\\dots,A_{n}\\in\\mathcal{B}_{1}$:$$P(\\xi_{1}\\in A_{1},\\dots,\\xi_{n}\\in A_{n})=P(\\xi_{1}\\in A_{1})\\dots P(\\xi_{n}\\in A_{n})$$"
-      },
-      {
-        q: "22. Определение математического ожидания случайной величины и его свойства",
-        a: "$$E\\xi =\\int_{\\Omega}\\xi(\\omega)dP(\\omega)=\\int_{\\mathbb{R}}xd\\mathcal{P}_{\\xi}(x)$$<br><br>Существует, если интеграл следующий интеграл сходиться абсолютно$$\\int_{\\Omega}|\\xi(\\omega)|dP(\\omega)&lt;\\infty$$<br><strong>Свойства:</strong><br>1. Если с. в. константа ($c=const:P(\\xi=c)=1$) => $E\\xi=c$<br>2. Монотонность $P(\\xi\\leq\\eta)\\Rightarrow E\\xi\\leq E\\eta$<br>3. Линейность $a,b\\in\\mathbb{R}\\Rightarrow E(a\\xi + b\\eta)=aE\\xi+bE\\eta$<br>4. Если $\\xi,\\eta$ - независимые => $E\\xi\\eta=E\\xi E\\eta$<br>5. $F_{\\xi}(x)=E I_{\\{\\xi&lt;x \\}},\\quad x\\in\\mathbb{R}$, где $\\displaystyle I_{\\{\\xi&lt;x\\}}=\\begin{cases}1,\\quad \\xi&lt;x\\\\0,\\quad \\xi\\geq x\\end{cases}$"
-      },
-      {
-        q: "23. Определение дисперсии случайной величины и её свойства",
-        a: "$$D\\xi=E(\\xi-E\\xi)^{2}$$<br><br><strong>Свойства:</strong><br>1. $D\\xi\\geq0\\forall\\xi;\\quad D\\xi=0\\Rightarrow\\xi=const$<br>2. $D\\xi=E\\xi^{2}-(E\\xi)^{2}$<br>3. $a,b\\in\\mathbb{R}\\Rightarrow D(a\\xi+b)=a^{2}D\\xi$<br>4. $\\xi,\\eta$ - независ => $D(\\xi+\\eta)=D\\xi+D\\eta$"
-      },
-      {
-        q: "24. Что называется ковариацией случайных величин X и Y; свойства ковариации",
-        a: "<strong>Ковариацией</strong> с. в. $\\xi$ и $\\eta$ называется$$\\text{cov}(\\xi,\\eta)=E(\\xi-E\\xi)(\\eta-E\\eta)$$<br><br>Она существует, если $E\\xi^{2}&lt;\\infty, E\\eta^2&lt;\\infty$<br><br><strong>Свойства:</strong><br>1°. $\\operatorname{cov}(\\xi, \\eta) = \\mathbb{E}\\xi\\eta - \\mathbb{E}\\xi\\mathbb{E}\\eta$<br>2°. $\\operatorname{cov}(\\xi, \\eta) = \\operatorname{cov}(\\eta, \\xi)$ — симметричность<br>3°. $a, b \\in \\mathbb{R} \\Rightarrow \\operatorname{cov}(a\\xi + b, \\eta) = a\\operatorname{cov}(\\xi, \\eta)$<br>4°. $a, b \\in \\mathbb{R} \\Rightarrow \\operatorname{cov}(a\\xi + b\\eta, \\zeta) = a\\operatorname{cov}(\\xi, \\zeta) + b\\operatorname{cov}(\\eta, \\zeta)$ — линейность<br>5°. $\\xi, \\eta$ — независимы $\\Rightarrow \\operatorname{cov}(\\xi, \\eta) = 0$<br>   <strong>(!)</strong> обратное не верно в общем случае<br>6°. $\\mathbb{D}(\\xi + \\eta) = \\mathbb{D}\\xi + \\mathbb{D}\\eta + 2\\operatorname{cov}(\\xi, \\eta)$<br>7°. $|\\operatorname{cov}(\\xi, \\eta)| \\leq \\sqrt{\\mathbb{D}\\xi \\mathbb{D}\\eta}$ — неравенство Коши–Буняковского–Шварца"
-      },
-      {
-        q: "25. Что называется коэффициентом корреляции случайных величин X и Y; свойства коэффициента корреляции",
-        a: "<strong>Коэффициентом корреляции</strong> случайных величин $\\xi$ и $\\eta$ называется:<br><br>$$<br>\\rho(\\xi, \\eta) = \\frac{\\operatorname{cov}(\\xi, \\eta)}{\\sqrt{\\mathbb{D}\\xi \\cdot \\mathbb{D}\\eta}}<br>$$<br><br> <strong>(!)</strong> коэффициент корреляции существует, если $\\mathbb{E}\\xi^2 &lt; \\infty$ и $\\mathbb{E}\\eta^2 &lt; \\infty$<br><br><strong>Свойства коэффициента корреляции</strong>:<br>1°. $|\\rho(\\xi, \\eta)| \\leq 1$;  <br>   $$<br>   \\begin{cases}<br>   \\rho(\\xi, \\eta) = 1 \\iff \\exists\\, a &gt; 0,\\, b \\in \\mathbb{R}:\\, \\eta = a\\xi + b \\\\<br>   \\rho(\\xi, \\eta) = -1 \\iff \\exists\\, a &lt; 0,\\, b \\in \\mathbb{R}:\\, \\eta = a\\xi + b<br>   \\end{cases}<br>   $$<br>2°. $\\rho(\\xi, \\eta) = \\rho(\\eta, \\xi)$ — симметричность<br>3°. $a, b \\in \\mathbb{R} \\Rightarrow \\rho(a\\xi + b, \\eta) = \\operatorname{sign}(a)\\rho(\\xi, \\eta) = \\begin{cases}\\rho(\\xi, \\eta), & \\text{при } a &gt; 0 \\\\0, & \\text{при } a = 0 \\\\-\\rho(\\xi, \\eta), & \\text{при } a &lt; 0\\end{cases}$<br>4°. $\\xi, \\eta$ — независимы $\\Rightarrow \\rho(\\xi, \\eta) = 0$<br>   <strong>(!)</strong> обратное не верно в общем случае"
-      },
-      {
-        q: "26. Как определяется условное распределение ξ при условии η, если (ξ,η) – дискретный случайный вектор",
-        a: "1) Условное распределение $\\xi$ при условии $\\eta=x:P(\\eta=x)&gt;0$ ($x\\in\\text{supp}(\\eta)$) - дискретное распределение с вероятностями $p_{y|x}=P(\\xi=y|\\eta=x)$ (ну то есть по сути сначала задаем  распределение при определённом значении $\\eta$)<br>2) Условное распределение $\\xi$ при условии $\\eta$ - случайное распределение с вероятностями $p_{y|\\eta}$, $y\\in\\text{supp}(\\xi)$, зависящими от $\\eta$ (тут уже условно мы знаем распределение $\\xi$ при каждом возможном значении $\\eta$)<br><br>Записывается оно с помощью таблицы, со столбцами:<br>1) Значение $\\eta$ (пусть $x$)<br>2) Вероятность этого значения $x$<br>3) И далее для каждого значения $\\xi$ пишется вероятность, при условии, что $\\eta=x$<br>4) В конце сумма всех столбцов с вероятностями $\\xi$ - должна быть равна 1"
-      },
-      {
-        q: "27. Что называется условным мат.ожиданием ξ при условии η, если (ξ,η) – дискретный случайный вектор",
-        a: "<strong>При конкретном значении $b$:</strong><br>$$E(\\xi|\\eta=b)=\\frac{\\sum\\limits_{i:a_{i}\\in\\text{supp}(\\xi)}a_{i}p_{a_{i}b}}{\\sum\\limits_{i:a_{i}\\in\\text{supp}(\\xi)}p_{a_{i}b}}$$<br>Почему так:<br>$\\displaystyle P(\\xi=a_{j}|\\eta=b)=\\frac{p_{a_{j}b}}{p_{b}}$ - по формуле условной вероятности, а вероятность $b$ это сумма сумма всех вероятностей исходов, где $\\eta=b$ ( $\\sum\\limits_{i:a_{i}\\in\\text{supp}(\\xi)}p_{a_{i}b}$). А далее просто по этим вероятностям ищем матожидание по базовой формуле.<br><br>Ну и в общем случае видимо просто вместо $b$ подставляем $\\eta$ в итоговое значение"
-      },
-      {
-        q: "28. Что называется условной плотностью распределения случайного вектора ξ при условии η",
-        a: "$\\overline{\\xi}=(\\xi,\\eta)$ - случайный вектор с плотностью $p_{\\overline{\\xi}}$<br><br><strong>При конкретном значении $\\eta$:</strong><br>Условная плотность распределения $\\xi$ при условии $\\eta$ - измеримая функция:$$p_{\\xi|\\eta=x}(y)=\\frac{p_{\\overline{\\xi}}(x,y)}{p_{\\eta}(x)}$$Где $p_{\\eta}(x)=\\int_{-\\infty}^{\\infty}p_{\\overline{\\xi}}(x,y)dy$<br><br><strong>В общем случае:</strong><br>Условное распределение $\\xi_2$ при условии $\\xi_1$ — абсолютно-непрерывное случайное распределение с плотностью $p_{\\xi_2 \\mid \\xi_1}$, зависящей от $\\xi_1$.<br>- $p_{\\xi_2 \\mid \\xi_1}(y)$ получают подстановкой $\\xi_1$ вместо $x$ в $p_{\\xi_2 \\mid \\xi_1 = x}(y)$"
-      },
-      {
-        q: "29. Что называется условным мат.ожиданием ξ при условии η, если (ξ,η) абсолютно непрерывный случайный вектор",
-        a: "$$<br>\\mathbb{E}(\\xi \\mid \\eta = b) = \\frac{\\int_{\\mathbb{R}} x \\, p_{\\xi\\eta}(x, b) \\, dx}{\\int_{\\mathbb{R}} p_{\\xi\\eta}(x, b) \\, dx}, \\quad b \\in \\operatorname{supp}(\\eta)<br>$$<br>- $p_{\\xi\\eta}$ — плотность совместного распределения $(\\xi, \\eta)$<br><br>Ну и в общем случае видимо просто вместо $b$ подставляем $\\eta$ в итоговое значение"
-      },
-      {
-        q: "30. Формула полной вероятности для суммы компонент абсолютно непрерывного случайного вектора и формула свертки",
-        a: "<strong>Формула полной вероятности для суммы компонент:</strong><br>Пусть $p_{\\overline{\\xi}} : \\mathbb{R}^2 \\to [0, \\infty)$ — плотность распределения $\\overline{\\xi}$ $\\Rightarrow$<br>$$p_{\\xi_1 + \\xi_2}(x) = \\int_{-\\infty}^{\\infty} p_{\\xi_2 \\mid \\xi_1 = u}(x - u) \\, p_{\\xi_1}(u) \\, du$$<br>- $p_{\\xi_2 \\mid \\xi_1 = x}(y) = \\dfrac{p_{\\overline{\\xi}}(x, y)}{p_{\\xi_1}(x)}, \\quad y \\in \\mathbb{R}, \\; x : p_{\\xi_1}(x) &gt; 0$ — условная плотность<br><br><strong>Формулы свертки:</strong><br>Пусть $\\xi_1, \\xi_2$ — независимые случайные величины; $p_{\\xi_i} : \\mathbb{R} \\to [0, \\infty)$, $i = 1, 2$ — соответствующие плотности распределения $\\Rightarrow$<br>$$<br>p_{\\xi_1 + \\xi_2}(x) = \\int_{-\\infty}^{\\infty} p_{\\xi_2}(x - u) \\, p_{\\xi_1}(u) \\, du = \\int_{-\\infty}^{\\infty} p_{\\xi_1}(x - v) \\, p_{\\xi_2}(v) \\, dv<br>$$<br><br>По сути одно и то же, только во втором случае независимы - поэтому условная плотность равна обычной"
+        q: "11. Маргинальные и совместные асимптотические ДИ. Методы Шеффе и Бонферрони",
+        a: "<strong>TL;DR:</strong> Эллипсоид: $n(\\hat\\theta-\\theta)'\\hat\\Sigma^{-1}(\\hat\\theta-\\theta) \\leq x_\\alpha$ через $\\chi^2_d$. Шеффе — совместные для всех линейных функций. Бонферрони: уровень $1-\\alpha/k$ для каждого из $k$ интервалов.<br><br><strong>Формально:</strong><br>Если $\\sqrt{n}(\\hat\\theta - \\theta) \\Rightarrow \\mathcal{N}(0,\\Sigma(\\theta))$, то $n(\\hat\\theta-\\theta)'\\Sigma^{-1}(\\theta)(\\hat\\theta-\\theta) \\Rightarrow \\chi^2_d$. Асимптотическое доверительное множество уровня $1-\\alpha$: $$\\hat\\Theta = \\{\\theta : (\\hat\\theta-\\theta)'\\hat\\Sigma^{-1}(\\hat\\theta-\\theta) \\leq x_\\alpha/n\\},$$ $x_\\alpha : K_d(x_\\alpha) = 1-\\alpha$ — эллипсоид.<br><strong>Метод Шеффе.</strong> Для $L_B = \\{\\psi = C'\\vartheta_B\\}$ ($q$-мерное пространство ДНО-функций): $$\\mathbb{P}_\\theta(\\hat\\psi - \\hat\\sigma_\\psi(x_\\alpha/n)^{1/2} \\leq \\psi \\leq \\hat\\psi + \\hat\\sigma_\\psi(x_\\alpha/n)^{1/2},\\ \\forall\\psi\\in L_B) \\to 1-\\alpha.$$<strong>Метод Бонферрони.</strong> Строим ДИ уровня $1-\\alpha/k$ для каждой из $k$ функций. По неравенству Буля их одновременная вероятность $\\geq 1-\\alpha$."
       }
     ],
-    "Последовательности случайных величин и предельные теоремы": [
+    "Проверка гипотез": [
       {
-        q: "31. Неравенство Коши-Буняковского для мат. ожиданий",
-        a: "Если $\\mathbb{E}\\xi^2 &lt; \\infty$, $\\mathbb{E}\\eta^2 &lt; \\infty$ $\\Rightarrow$<br>$$<br>\\mathbb{E}|\\xi\\eta| \\leq \\sqrt{\\mathbb{E}\\xi^2 \\cdot \\mathbb{E}\\eta^2}<br>$$"
+        q: "12. Постановка задачи проверки гипотез. Таблица ошибок. Критерий и мощность",
+        a: "<strong>TL;DR:</strong> $H_0 : \\theta\\in\\Theta_0$ vs $H_A : \\theta\\in\\Theta_A$; ошибки I (отвергли верную) и II (приняли неверную) рода; критерий $\\phi : \\mathfrak{X}\\to[0,1]$; мощность $b_\\phi(\\theta) = E_\\theta\\phi$.<br><br><strong>Формально:</strong><br><strong>Определение.</strong> <em>Статистической гипотезой</em> называется утверждение $H : \\theta\\in\\Theta^*\\subseteq\\Theta$. Простая: $H_0 : \\theta = \\theta^*$. Сложная — остальные.<br>Постановка: основная $H_0 : \\theta\\in\\Theta_0$, альтернатива $H_A : \\theta\\in\\Theta_A$, $\\Theta_0\\cap\\Theta_A = \\emptyset$.<br>Ошибки: I рода — отвергнуть $H_0$ при её справедливости; II рода — принять $H_0$ при справедливости $H_A$.<br><strong>Определение.</strong> <em>Статистическим критерием</em> называется статистика $\\phi : \\mathfrak{X}\\to[0,1]$ — вероятность отвергнуть $H_0$. <em>Мощность:</em> $b_\\phi(\\theta) = E_\\theta\\phi(X)$, $\\theta\\in\\Theta_A$. <em>Уровень значимости</em> $\\alpha$ ограничивает $P_\\theta(\\text{ошибки I рода}) = E_\\theta\\phi$, $\\theta\\in\\Theta_0$. Критерий <em>несмещённый</em>, если $\\sup_{\\Theta_0} b_\\phi \\leq \\inf_{\\Theta_A} b_\\phi$."
       },
       {
-        q: "32. Неравенства Маркова и Чебышева, и где они применяются",
-        a: "<strong>Неравенство Маркова (C1):</strong><br>Если $\\xi$: $\\mathbb{P}(\\xi \\geq 0) = 1$;  <br>$f : \\mathbb{R}_+ \\to \\mathbb{R}_+$ — неубывающая функция, $f(x) &gt; 0$ для всех $x &gt; 0$;  <br>$\\mathbb{E}f(\\xi) &lt; \\infty$ $\\Rightarrow$ $\\forall \\varepsilon &gt; 0$<br>$$<br>\\mathbb{P}(\\xi &gt; \\varepsilon) \\leq \\frac{\\mathbb{E}f(\\xi)}{f(\\varepsilon)}<br>$$<br><br><strong>Неравенство Чебышёва (C2):</strong><br>Если $\\xi$: $\\mathbb{E}\\xi^2 &lt; \\infty$ $\\Rightarrow$ $\\forall \\varepsilon &gt; 0$<br><br>$$<br>\\mathbb{P}(|\\xi - \\mathbb{E}\\xi| &gt; \\varepsilon) \\leq \\frac{\\mathbb{D}\\xi}{\\varepsilon^2}<br>$$<br><br>По неравенству Чебышева доказывается теорема Маркова (больших чисел). Где используется Марков хз"
+        q: "13. Проверка гипотез о параметрах нормального распределения (одна и две выборки)",
+        a: "<strong>TL;DR:</strong> $t$-тест согласия: $T = \\sqrt{n-1}\\bar X/s \\sim S_{n-1}$ при $H_0 : a=0$. Двухвыборочный $t$-тест: $T \\sim S_{n+k-2}$ при $H_0 : a_1=a_2$. $F$-тест: $V = ns_x^2/(ks_y^2) \\sim F_{n-1,k-1}$ при $H_0 : \\sigma_1^2=\\sigma_2^2$.<br><br><strong>Формально:</strong><br><strong>t-тест согласия</strong> ($X_1,\\ldots,X_n \\sim \\mathcal{N}(a,\\sigma^2)$, $H_0 : a=0$, $H_A : a\\neq 0$): $$T(X) = \\sqrt{n-1}\\frac{\\bar X}{s} \\sim S_{n-1}\\text{ при }H_0.$$ Критерий отвергает $H_0$ при $|T| &gt; t_\\alpha$ ($S_{n-1}(t_\\alpha) = 1-\\alpha/2$).<br><strong>t-тест однородности</strong> ($\\mathcal{N}(a,\\sigma^2)$ и $\\mathcal{N}(b,\\sigma^2)$, $H_0 : a=b$): $$T = \\sqrt{\\frac{nk(n+k-2)}{k+n}}\\frac{\\bar X - \\bar Y}{\\sqrt{ns_x^2 + ks_y^2}} \\sim S_{n+k-2}\\text{ при }H_0.$$<strong>F-тест равенства дисперсий</strong> ($H_0 : \\sigma_1^2 = \\sigma_2^2$): $$V(X) = \\frac{ns_x^2}{ks_y^2} \\sim F_{n-1,k-1}\\text{ при }H_0.$$"
       },
       {
-        q: "33. Закон больших чисел в форме Бернулли",
-        a: "У него не нашел, взял у Лизы<br>$\\mu_{n}$ - число успехов в $n$ испытаниях Бернулли с вероятностью успеха $p$ => <br>$$\\forall \\epsilon&gt;0\\quad P(|\\frac{1}{n}\\mu_{n}-p|&gt;\\epsilon)\\underset{n\\to\\infty}{\\to}0$$<br>- $\\xi_{i}=\\begin{cases}0, \\quad \\text{неудача в i-том испытании}\\\\1,\\quad \\text{успех в i-том испытании}\\end{cases}$<br>- $E\\xi_{i}=p$<br>- $D\\xi_{i}=p(1-p)$<br>- $\\displaystyle \\mu_{n}=\\sum\\limits_{i=1}^{n}\\xi_{i}$"
+        q: "14. Простая гипотеза против простой альтернативы. Лемма Неймана–Пирсона",
+        a: "<strong>TL;DR:</strong> Для $H_0 : \\theta=\\theta_0$ vs $H_A : \\theta=\\theta_1$ наиболее мощный критерий строится через $LR(X) = L(X;\\theta_1)/L(X;\\theta_0)$.<br><br><strong>Формально:</strong><br><strong>Статистика отношения правдоподобия:</strong> $$LR(X, \\theta_1, \\theta_0) = \\frac{L(X;\\theta_1)}{L(X;\\theta_0)} = \\frac{p_{\\theta_1}(X)}{p_{\\theta_0}(X)}.$$<strong>Теорема (Лемма Неймана–Пирсона).</strong> $(i)$ Существует наиболее мощный критерий уровня значимости $\\alpha$. $(ii)$ Данный критерий: $$\\phi(x) = \\begin{cases} 1, & LR(x) &gt; c; \\\\ p, & LR(x) = c; \\\\ 0, & LR(x) &lt; c, \\end{cases}$$ где $c$ и $p\\in[0,1]$ находятся из условия $E_{\\theta_0}\\phi(X) = P_{\\theta_0}(LR &gt; c) + p\\,P_{\\theta_0}(LR = c) = \\alpha$. $(iii)$ В области $LR(X) \\neq c$ наиболее мощный критерий определён однозначно."
       },
       {
-        q: "34. Теорема Маркова о законе больших чисел",
-        a: "<strong>Теорема Маркова:</strong><br>Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — последовательность случайных величин: $\\mathbb{E}\\xi_i = 0$, $\\forall i \\in \\mathbb{N}$, и$$<br>\\frac{1}{n^2} \\mathbb{D}\\left( \\sum_{i=1}^{n} \\xi_i \\right) \\xrightarrow[n \\to \\infty]{} 0<br>$$Тогда $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ удовлетворяет <strong>ЗБЧ</strong> (закону больших чисел)."
+        q: "15. Непараметрические χ²-критерии Пирсона (простая и сложная гипотезы согласия)",
+        a: "<strong>TL;DR:</strong> $X^2 = \\sum(\\nu_i - np_{i0})^2/(np_{i0}) \\Rightarrow \\chi^2_{r-1}$ (простая); при оценке $d$ параметров — $\\chi^2_{r-d-1}$ (теорема Нейман–Фишера).<br><br><strong>Формально:</strong><br><strong>Критерий $\\chi^2$ для простой гипотезы</strong> $H_0 : p_1 = p_{10},\\ldots,p_r = p_{r0}$: $$X^2 = \\sum_{i=1}^r \\frac{(\\nu_i - np_{i0})^2}{np_{i0}} \\Rightarrow \\chi^2_{r-1}\\text{ при }H_0.$$ Критерий уровня $\\alpha$: $\\phi = 1$ при $X^2 &gt; x_\\alpha$, $x_\\alpha : K_{r-1}(x_\\alpha) = 1-\\alpha$.<br><strong>Теорема (Нейман–Фишера).</strong> При сложной гипотезе $H_0 : F\\in\\{F_\\theta, \\theta\\in\\Theta_0\\}$, $\\dim(\\Theta_0) = d$, при выполнении условий $(а)$–$(в)$ регулярности: $$\\widehat X^2 = \\sum_{j=1}^r \\frac{(\\nu_j - n\\hat p_j)^2}{n\\hat p_j} \\Rightarrow \\chi^2_{r-d-1}\\text{ при }H_0,$$ где $\\hat p_j = F_{\\hat\\theta}(I_j)$ — ОМП ожидаемых частот по группированным данным."
       },
       {
-        q: "35. Теорема Чебышева о законе больших чисел",
-        a: "<strong>Теорема Чебышёва:</strong><br>Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — последовательность <strong>независимых</strong> случайных величин: $\\mathbb{E}\\xi_i = 0$, $\\mathbb{D}\\xi_i = \\sigma_i^2 &lt; M &lt; \\infty$, $\\forall i \\in \\mathbb{N}$. Тогда $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ удовлетворяет <strong>ЗБЧ</strong> (закону больших чисел).<br><br>Независимые + существует матожидание и дисперсия"
-      },
-      {
-        q: "36. Закон больших чисел в форме Хинчина",
-        a: "<strong>Теорема Хинчина:</strong><br>Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — последовательность <strong>независимых и одинаково распределённых</strong> случайных величин (<strong>НОРСВ</strong>): $\\mathbb{E}\\xi_i = 0$, $\\forall i \\in \\mathbb{N}$. Тогда $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ удовлетворяет <strong>ЗБЧ</strong> (закону больших чисел).<br><br>Независимые + матожидание + одинаково распределенные"
-      },
-      {
-        q: "37. Что означает ξn →ξ по вероятности, ξn →ξ с вероятностью 1, ξn →ξ в среднем порядка p",
-        a: "<strong>По вероятности:</strong><br>Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ <strong>сходится к случайной величине</strong> $\\xi$ <strong>по вероятности</strong>, если$\\forall \\varepsilon &gt; 0$<br>$$<br>\\mathbb{P}(|\\xi_n - \\xi| &gt; \\varepsilon) \\xrightarrow[n \\to \\infty]{} 0<br>$$Обозначаение $\\xi_n \\xrightarrow[n \\to \\infty]{P} \\xi$<br><br><strong>С вероятностью 1:</strong><br>Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ <strong>сходится к случайной величине</strong> $\\xi$ <strong>с вероятностью 1</strong> (или <strong>почти наверное</strong>), если  $\\forall \\varepsilon &gt; 0$$$<br>\\mathbb{P}\\left( \\left\\{ \\omega : \\lim_{n \\to \\infty} |\\xi_n(\\omega) - \\xi(\\omega)| = 0 \\right\\} \\right) = 1<br>$$Обозначение $\\xi_n \\xrightarrow[n \\to \\infty]{п.н.} \\xi\\equiv\\xi_n \\xrightarrow[n \\to \\infty]{P=1} \\xi$<br><br><strong>В среднем порядка p:</strong><br>Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$, для которой $\\mathbb{E}|\\xi_i|^p &lt; \\infty$, $i \\in \\mathbb{N}$, <strong>сходится к случайной величине</strong> $\\xi$ <strong>в среднем порядка</strong> $p &gt; 0$ (или <strong>в</strong> $L_p$), если$$<br>\\mathbb{E}|\\xi_n - \\xi|^p \\xrightarrow[n \\to \\infty]{} 0<br>$$Обозначение: $\\xi_n \\xrightarrow[n \\to \\infty]{L_p} \\xi$"
-      },
-      {
-        q: "38. Какая связь между сходимостью по вероятности, с вероятностью 1 и в среднем",
-        a: "- Из сходимости с вероятностью 1 следует сходимость по вероятности.<br>- Из сходимости в среднем следует сходимость по вероятности<br><br>Только так"
-      },
-      {
-        q: "39. Что означает ξn ⇒ξ слабо (по распределению). Связь с другими видами сходимости",
-        a: "<strong>Cходимость по распределению (слабая):</strong><br>Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ (необязательно заданных в рамках одного эксперимента) <strong>сходится к случайной величине</strong> $\\xi$ <strong>по распределению</strong> (или <strong>слабо</strong>), если<br>$$<br>F_{\\xi_n}(x) \\xrightarrow[n \\to \\infty]{} F_{\\xi}(x) \\quad \\forall x \\in \\mathbb{R} : F_{\\xi}(x) \\text{ непрерывна в точке } x<br>$$Обозначение: $\\xi_n \\Rightarrow \\xi$<br><br>Cходимость по распределению следует из сходимости по вероятности. А сходимость по вероятности следует из сходимости с вероятностью 1 и сходимости в среднем (короче следует из всех сходимостей поэтому и слабая)."
-      },
-      {
-        q: "40. Что называется законом больших чисел и его запись с использованием известных видов сходимости последовательностей случайных величин",
-        a: "1. Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ <strong>удовлетворяет закону больших чисел (ЗБЧ)</strong>, если<br>$$<br>\\frac{1}{n} \\sum_{i=1}^{n} \\xi_i \\xrightarrow[n \\to \\infty]{\\mathbb{P}} 0<br>$$<br><br>2. Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ <strong>удовлетворяет усиленному закону больших чисел (УЗБЧ)</strong>, если$$<br>\\frac{1}{n} \\sum_{i=1}^{n} \\xi_i \\xrightarrow[n \\to \\infty]{\\mathbb{P}=1} 0<br>$$<br><br>3. Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$: $\\mathbb{E}|\\xi_i|^p &lt; \\infty$ ($\\xi_i \\in L_p$), при некотором $p \\geq 1$, <strong>удовлетворяет ЗБЧ в пространстве</strong> $L_p$, если$$<br>\\frac{1}{n} \\sum_{i=1}^{n} \\xi_i \\xrightarrow[n \\to \\infty]{L_p} 0<br>$$"
-      },
-      {
-        q: "41. Центральная предельная теорема Леви (для случайных величин и векторов)",
-        a: "<strong>Для случайных величин:</strong><br>Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — последовательность <strong>независимых и одинаково распределённых</strong> случайных величин (НОРСВ): $\\mathbb{E}\\xi_1 = a$, $\\mathbb{D}\\xi_1 = \\sigma^2$ ($0 < \\sigma^2 < \\infty$). Тогда<br>$$\\frac{\\sum_{i=1}^{n} \\xi_i - na}{\\sigma\\sqrt{n}} \\xrightarrow[n \\to \\infty]{\\mathcal{D}} \\mathcal{N}(0, 1)$$<br><br><strong>Для векторов:</strong><br>Пусть $\\{\\boldsymbol{\\xi}_i\\}_{i \\in \\mathbb{N}}$  последовательность независимых и одинаково распределённых случайных векторов: $\\mathbb{E}\\boldsymbol{\\xi}_1 = \\boldsymbol{a}$ и $\\operatorname{Var}(\\boldsymbol{\\xi}_1) = \\boldsymbol{\\Sigma}$ — положительно-определённая матрица. Тогда<br>$$n^{-1/2} \\sum_{i=1}^{n} (\\boldsymbol{\\xi}_i - \\boldsymbol{a}) \\xrightarrow[n \\to \\infty]{\\mathcal{D}} \\mathcal{N}(\\boldsymbol{0}, \\boldsymbol{\\Sigma})$$<br>- $\\boldsymbol{0} = (0, \\dots, 0)^{T}$ — нулевой вектор<br>- $\\mathcal{N}(\\boldsymbol{0}, \\boldsymbol{\\Sigma})$ — многомерное нормальное распределение с нулевым вектором математических ожиданий и матрицей ковариации $\\boldsymbol{\\Sigma}$"
-      },
-      {
-        q: "42. Сформулировать ЦПТ Леви в частном случае испытаний Бернулли",
-        a: "Ну это просто интегральная теорема Муавра-Лапласа<br>$$<br>\\frac{\\sum_{i=1}^{n} \\xi_i - na}{\\sqrt{n} \\, \\sigma} \\xrightarrow[n \\to \\infty]{\\mathcal{D}} \\mathcal{N}(0, 1)<br>$$<br>Знаем, что $a=p$ и $\\sigma=\\sqrt{p(1-p)}$ , а $\\sum\\limits\\xi_{i}=\\mu_{n}$, получаем ровно то что снизу у нас. Этот интеграл это функция нормального распределения.<br><br>$$\\sup_{-\\infty&lt;a&lt;b&lt;\\infty}\\left|P\\left(a\\leq\\frac{\\mu_{n}-np}{\\sqrt{np(1-p)}} \\leq b\\right)-\\int\\limits_{a}^{b}\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{t^{2}}{2}}dt\\right|\\underset{n\\to\\infty}{\\rightarrow}0$$"
-      },
-      {
-        q: "43. Марковское свойство, что называется цепью Маркова и уравнения Маркова",
-        a: "<strong>Марковское свойство:</strong><br>Последовательность $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ <strong>удовлетворяет Марковскому свойству</strong>, если<br>$$<br>\\mathbb{P}(\\xi_{k+1} \\in B \\mid \\xi_1 = x_1, \\dots, \\xi_k = x_k) = \\mathbb{P}(\\xi_{k+1} \\in B \\mid \\xi_k = x_k)<br>$$<br>для любых $(x_1, \\dots, x_k) \\in \\operatorname{supp}(\\boldsymbol{\\xi}_k)$, где $\\boldsymbol{\\xi}_k = (\\xi_1, \\dots, \\xi_k)$, при любом $k \\in \\mathbb{N}$.<br><br>Если в душе не ебете что это значит говорите так: Будущее зависит от прошлого только через настоящее. Или умнее будущее и прошлое условно независимы при условии<br>настоящего.<br><br><strong>Цепью маркова</strong> называется последовательность дискретных случайных величин, удовлетворяющих свойству Маркова.<br><br><strong>Уравнение Маркова:</strong><br>$$<br>p_{ij}^{(k+s)} = \\sum_{l \\in \\mathcal{N}} p_{il}^{(k)} p_{lj}^{(s)}<br>$$<br>- $p_{ij}^{(s)} = \\mathbb{P}(\\xi_{n+s} = j \\mid \\xi_n = i)$ — вероятности перехода за $s$ шагов<br>- Формула полной вероятности<br>- $\\mathbf{P}^{(s)} = \\mathbf{P} \\cdot \\ldots \\cdot \\mathbf{P} = \\mathbf{P}^s$<br>  - $\\mathbf{P}^{(s)} = \\left( p_{ij}^{(s)} \\right)_{i,j \\in \\mathcal{N}}$ — матрица вероятностей перехода за $s$ шагов"
-      },
-      {
-        q: "44. Определение возвратного состояния, критерий возвратности",
-        a: "Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — <strong>однородная цепь Маркова</strong>.<br><br>- Вероятность первого возвращения в состояние $i$ на $k$-м шаге:  $$<br>  f_{ii}^{(k)} = \\mathbb{P}(\\xi_{n+k} = i,\\, \\xi_{n+k-1} \\ne i,\\, \\dots,\\, \\xi_{n+1} \\ne i \\mid \\xi_n = i)<br>  $$<br><br>- $f_i = \\sum_{k=1}^{\\infty} f_{ii}^{(k)} \\leq 1$ — вероятность возвращения в состояние $i$<br>- $\\mu_i = \\sum_{k=1}^{\\infty} k f_{ii}^{(k)}$ — среднее время возвращения в состояние $i$<br><br>1. Состояние $i \\in E$ — <strong>возвратное</strong>, если $f_i = 1$<br>2. Состояние $i \\in E$ — <strong>эргодическое</strong>, если оно возвратное и $\\mu_i &lt; \\infty$<br>3. Возвратное состояние $i \\in E$ — <strong>нулевое</strong>, если $\\mu_i = \\infty$<br><br><br> Непосредственная проверка (с использованием определений) свойств возвратности и эргодичности состояний затруднительна.<br><br><strong>В однородной цепи Маркова:</strong><br>1. Состояние $i$ возвратное $\\iff \\sum_{k=1}^{\\infty} p_{ii}^{(k)} = \\infty$<br>2. Состояние $i$ возвратное нулевое $\\iff \\sum_{k=1}^{\\infty} p_{ii}^{(k)} = \\infty$, но $p_{ii}^{(k)} \\xrightarrow[k \\to \\infty]{} 0$<br>3. Состояние $i$ эргодическое $\\iff p_{ii}^{(k)} \\not\\xrightarrow[k \\to \\infty]{} 0$"
-      },
-      {
-        q: "45. Условие эргодичности неприводимой цепи Маркова и вычисление финальных вероятностей",
-        a: "Однородная цепь Маркова <strong>неприводимая</strong>, если все ее состояния<br>сообщаются.<br><br>Неприводимая цепь Маркова называется <strong>эргодической</strong>, если все её состояния эротические.<br><br>Состояние $i$ эргодическое $\\iff p_{ii}^{(k)} \\not\\xrightarrow[k \\to \\infty]{} 0$<br><br><br><strong>Как находить состояния формально:</strong><br>1. В однородной неприводимой непериодической эргодической цепи Маркова существуют не зависящие от $i \\in \\mathcal{N}$ пределы  <br>   $$<br>   p_j = \\lim_{k \\to \\infty} p_{ij}^{(k)}, \\quad j \\in \\mathcal{N},<br>   $$удовлетворяющие условию $\\sum_{j \\in \\mathcal{N}} p_j = 1$.<br>2. Значения $\\{p_j\\}_{j \\in \\mathcal{N}}$ — единственное решение системы уравнений  <br>   $$<br>   p_j = \\sum_{i \\in \\mathcal{N}} p_i p_{ij} \\quad \\text{и} \\quad \\sum_{j \\in \\mathcal{N}} p_j = 1<br>   $$<br>3. Более того, $p_j = \\dfrac{1}{\\mu_j}, \\; j \\in \\mathcal{N}$<br><br><strong>А по факту просто решаем уравнение:</strong><br>$P^{T}\\overline{p}=\\overline{p}$ и $\\sum\\limits_{i=1}^{n}p_{i}=1$"
+        q: "16. Критерии Колмогорова, Колмогорова–Смирнова, Крамера–фон Мизеса",
+        a: "<strong>TL;DR:</strong> $D_n = \\sup|F_n - F_0|$, $\\sqrt{n}D_n \\Rightarrow \\mathcal{K}$. $\\omega^2_n = \\int(F_n-F_0)^2 dF_0$. Двухвыборочный КС: $D_{n,m} = \\sup|F_n - F_m|$, $\\sqrt{nm/(n+m)}D_{n,m} \\Rightarrow \\mathcal{K}$.<br><br><strong>Формально:</strong><br><strong>Критерий Колмогорова.</strong> $H_0 : F \\equiv F_0$ ($F_0$ непрерывна), статистика $D_n = \\sup_{x}|F_n(x) - F_0(x)|$. По теореме Колмогорова $\\sqrt{n}D_n \\Rightarrow \\mathcal{K}$ при $H_0$. Критерий: $\\phi = 1$ при $D_n &gt; x_\\alpha/\\sqrt{n}$, $x_\\alpha : K(x_\\alpha/\\sqrt{n}) = 1-\\alpha$.<br><strong>Критерий $\\omega^2$ Крамера–Мизеса–Смирнова.</strong> $$\\omega_n^2 = \\int(F_n(x) - F_0(x))^2 dF_0(x) = \\frac{1}{12n} + \\sum_{i=1}^n\\!\\left(F_0(X_{(i)}) - \\frac{2i-1}{2n}\\right)^{\\!2},$$ $T_n = n\\omega_n^2$ — статистика с табулированным распределением.<br><strong>Критерий КС однородности.</strong> $H_0 : F_1 \\equiv F_2$; $D_{n,m} = \\sup_x|F_n(x) - F_m(x)|$; $D(n,m) = \\sqrt{\\frac{nm}{n+m}}D_{n,m} \\Rightarrow \\mathcal{K}$."
       }
     ],
-    "Особые знания": [
-  {
-    q: "46. Что называется σ-алгеброй и определение измеримого пространства.",
-    a: "Пусть $X$ - множество, $\\mathcal{U}$ - система подмножеств<br><br>$\\mathcal{U}$ - $\\sigma$-алгебра, если:<br>1) $\\emptyset\\in\\mathcal{U}$<br>2) $\\forall A,B\\in\\mathcal{U}:A\\cap B\\in\\mathcal{U}$<br>3) $\\forall A,A_{1}\\in \\mathcal{U}:A\\supset A_{1}\\Rightarrow\\exists A_{2},\\dots,A_{k}\\in\\mathcal{U}:A_{i}\\cap A_{j}=\\emptyset,i\\neq j$, и $A=\\bigcup_{i=1}^{n}A_{i}$ (вот это так и не понял надо или нет)<br>4) $\\forall A,B\\in \\mathcal{U}\\rightarrow A\\setminus B\\in\\mathcal{U}$<br>5) $\\forall A_{1},A_{2},\\dots\\in\\mathcal{U}\\Rightarrow\\bigcup_{i=1}^{\\infty}A_{i}\\in \\mathcal{U}$<br>6) $X\\in \\mathcal{U}$<br><br><strong>Если словами:</strong> чтобы система подмножеств была $\\sigma$-алгеброй нужно чтобы в неё входили: пустое множество $\\emptyset$, исходное множество $X$. Также для любых двух множеств из этой системы в ней должно быть: пересечение и разность. Для любого счетного количества множеств должно быть их объединение. И (вот хуй пойми надо или нет) для любых двух множеств $A,A_{1}:A_{1}\\subset A$ в этой системе должно существовать разбиение множества $A$, в которое входит множество $A_{1}$ (ну то есть сколько то непересекающихся множеств, в объединении дающих $A$)<br><br><strong>Измеримое пространство</strong> - $(X,\\mathcal{U})$:<br>- $X$ - множество<br>- $\\mathcal{U}$ - $\\sigma$-алгебра подмножеств $X$"
-  },
-  {
-    q: "47. Что называется мерой (аксиомы) на измеримом пространстве.",
-    a: "Мерой на $(X,\\mathcal{U})$ называется функция $\\mu:\\mathcal{U}\\to[0,\\infty]$, удовлетворяющая аксиомам<br>(A1) $\\forall A\\in\\mathcal{U}\\quad \\mu(A)\\geq 0$<br>(A2) $\\forall A,B\\in \\mathcal{U}: A\\cap B=\\emptyset\\Rightarrow \\mu(A\\cup B)= \\mu(A)+\\mu(B)$ - аддитивность<br>(А3) $\\forall A_{1},A_{2},\\dots\\in\\mathcal{U}:A_{i}\\cap A_{j}=\\emptyset, i\\neq j\\Rightarrow\\mu (\\bigcup_{i=1}^{\\infty} A_{i})=\\sum\\limits_{i=1}^{\\infty}\\mu(A_{i})$ - счетная аддитивность<br><br>Короче аксиомы вероятности просто."
-  },
-  {
-    q: "48. Определение интеграла по мере (для простой, для неотрицательной, для измеримой функции )",
-    a: "<strong>Для простой функции:</strong><br>Пусть $\\{H_{i} \\}_{i=1}^{n}$ - конечное измеримое разбиение, $\\mu : \\mathcal{U}\\to[0,\\infty)$ - мера, $f: X\\to\\mathbb{R}$ - простая функция, $f(x)=c_{i},\\,\\, \\forall x\\in H_{i}, c_{i}\\in \\mathbb{R}, \\,\\, i=1,\\dots,n$. <strong>Интегралом Лебега</strong> от $f$ по мере $\\mu$ называется $$\\int fd\\mu=\\sum\\limits_{i=1}^{n}c_{i}\\mu(H_{i})$$ <br>Ну тут понятно. Простая функция - конечное кол-во значений (для каждого элемента из $H_{i}$, если закинуть его в функцию, будет одно и то же значение $c_{i}$), и суммируем их умножая на меру соответствующего множества.<br><br><strong>Для неотрицательной функции:</strong><br>Пусть $f:X\\to\\mathbb{R}$ - неотрицательно измеримая $\\Rightarrow$ (по 8 свойству) существует монотонная последовательность простых неотрицательных функций $\\{h_{n}\\}_{n\\in\\mathbb{N}}$:$h_{1}(x)\\leq h_{2}(x)\\leq\\dots$ и $\\lim_{n\\to\\infty}h_{n}(x)=f(x) \\forall x\\in X$<br><br>Пусть $\\{h_{i}\\}_{i=1}^{n}: 0\\leq h_{1}(x)\\leq \\dots\\leq f(x)$ и $\\lim_{n\\to\\infty}h_{n}(x)=f(x)\\forall x \\in X$; $I_{n}=\\int h_{n}d\\mu, n\\in\\mathbb{N}$. <strong>Интегралом Лебега</strong> от $f$ по мере $x$ называется:$$\\int fd\\mu=\\lim_{n\\to\\infty}I_{n}$$<br>Без комментариев<br><br><strong>Для измеримой функции:</strong><br><br>Пусть $f:X\\to\\mathbb{R}$ - измеримая функция; $f_{+}=\\max(f,0), f_{-}=\\max(-f,0)$. Интегралом Лебега от $f$ по мере $\\mu$ называется :$$\\int fd\\mu = \\int f_{+}d\\mu -\\int f_{-}d\\mu$$<br>Определение интеграла Лебега для измеримой функции корректно, если $I_{+}=\\int f_{+}d\\mu&lt;\\infty$ или $I_{-}=\\int f_{-}d\\mu&lt;\\infty$"
-  },
-  {
-    q: "49. Определение $Ef(X)$ через интеграл по мере.",
-    a: "$$Eg(\\xi)=\\int_{\\Omega}g(\\xi(\\omega))dP(\\omega)$$"
-  },
-  {
-    q: "50. Теорема Радона–Никодима и что такое производная Радона-Никодима меры µ по мере ν.",
-    a: "Пусть $(X,\\mathcal{U})$ - измеримое пространство; $\\mu,\\nu:\\mathcal{U}\\to[0,\\infty)$ - $\\sigma$-конечные меры . Тогда<br>1. $\\exists$ мера $\\nu^{\\perp}:\\mathcal{U}\\to[0,\\infty), \\,\\, \\nu^{\\perp}\\perp\\nu$ и измеримая функция $p:X\\to[0,\\infty)$ $$\\mu(A)=\\nu^{\\perp}(A)+\\int_{A}pd\\nu\\quad\\forall A\\in\\mathcal{U}$$<br>2. мера $\\nu^{\\perp}$ определена однозначно: функция $p$ определена однозначно $\\nu$-п. в. (с точностью до множеств меры 0)<br>3. Если $\\mu&lt;&lt;\\nu$, то $\\exists \\nu$-п.в. измеримая функция $p:X\\to[0,\\infty)$, такая, что $$\\mu(A)=\\int_{A}pd\\nu\\quad \\forall A\\in\\mathcal{U}$$<br>- $p=\\frac{d\\mu}{d\\nu}$ - плотность (или произоводная Радона-Никодима) меры $\\nu$ по мере $\\mu$<br><br>Пусть $(X, \\mathcal{U})$ - измеримое пространство. Мера $\\mu:\\mathcal{U}\\in[0,\\infty]$ - $\\sigma$-конечная, если $\\exists A_{1} \\subset A_{2}\\subset\\dots\\in\\mathcal{U}:\\mu(A_{i})&lt;\\infty,i=1,2,\\dots$ и $\\bigcup_{i=1}^{\\infty}A_{i}=X$"
-  },
-  {
-    q: "51. В каком случае существует производная Радона-Никодима меры µ по мере ν и что означает запись µ<<ν.",
-    a: "Если $\\mu,\\nu$ - $\\sigma$-конечные меры на измеримом пространстве и $\\mu&lt;&lt;\\nu$.<br><br>Мера $\\mu:\\mathcal{U}\\to[0,\\infty)$ доминирует $\\nu:\\mathcal{U}\\to[0,\\infty)$ (или абсолютно непрерывна по отношению к $\\mu$), если $\\forall A\\in\\mathcal{U}:\\mu(A)=0\\Rightarrow\\nu(A)=0$<br>- обозначается $\\nu &lt;&lt; \\mu$<br><br>То есть если при любом множестве $A$ из системы $\\mathcal{U}$, на котором $\\mu(A)=0$, то и $\\nu(A)=0$"
-  },
-  {
-    q: "52. Теорема Лебега о разложении распределения.",
-    a: "Распределение любой случайной величины $\\xi$ допускает единственное представление в виде<br><br>$$<br>\\mathcal{P}_\\xi = \\alpha_1 \\mathcal{P}_\\xi^d + \\alpha_2 \\mathcal{P}_\\xi^{ac} + \\alpha_3 \\mathcal{P}_\\xi^s<br>$$<br>- $\\alpha_1 + \\alpha_2 + \\alpha_3 = 1$<br>- $\\mathcal{P}_\\xi^d$ — дискретное распределение<br>- $\\mathcal{P}_\\xi^{ac}$ — абсолютно-непрерывное распределение<br>- $\\mathcal{P}_\\xi^s$ — непрерывное распределение, сингулярное с $\\mathcal{P}_\\xi^{ac}$"
-  },
-  {
-    q: "53. Определение и существование условного математического ожидания по отношению к сигма-алгебре событий.",
-    a: "<strong>Условным математическим ожиданием</strong> $\\mathbb{E}(\\xi \\mid \\mathfrak{A}) : \\Omega \\to \\mathbb{R}$ называется случайная величина, такая что<br><strong>(i)</strong> $\\mathbb{E}(\\xi \\mid \\mathfrak{A})$ — $\\mathfrak{A}$-измерима<br><strong>(ii)</strong> $$<br>\\int_A \\mathbb{E}(\\xi \\mid \\mathfrak{A}) \\, d\\mathbb{P} = \\int_A \\xi \\, d\\mathbb{P}, \\quad \\forall A \\in \\mathfrak{A}<br>$$<br>Пусть $(\\Omega, \\mathcal{F}, \\mathbb{P})$ — вероятностный эксперимент; $\\xi$ — случайная величина: $\\mathbb{E}|\\xi| &lt; \\infty$; $\\mathfrak{A} \\subseteq \\mathcal{F}$ —<br>$\\sigma$-алгебра событий.  Тогда $\\exists\\,!$ (с точностью до событий нулевой вероятности) случайная величина $\\mathbb{E}(\\xi \\mid \\mathfrak{A})$, удовлетворяющая условиям <strong>(i)</strong> и <strong>(ii)</strong>."
-  },
-  {
-    q: "54. Специальные свойства условного математического ожидания по отношению к σ-алгебре событий.",
-    a: "1°. $\\mathbb{E}\\big( \\mathbb{E}(\\xi \\mid \\mathfrak{A}) \\big) = \\mathbb{E}\\xi$<br>2°. $\\xi$ и $\\mathfrak{A}$ — независимы $\\Rightarrow \\mathbb{E}(\\xi \\mid \\mathfrak{A}) = \\mathbb{E}\\xi$  <br>   - $\\xi$ и $\\mathfrak{A}$ — независимы $\\iff \\{\\xi &lt; x\\}$ и $A$ — независимы при $\\forall x \\in \\mathbb{R},\\; A \\in \\mathfrak{A}$<br>3°. $\\eta$ — $\\mathfrak{A}$-измерима $\\Rightarrow \\mathbb{E}(\\xi\\eta \\mid \\mathfrak{A}) = \\eta \\cdot \\mathbb{E}(\\xi \\mid \\mathfrak{A})$<br>4°. $\\mathfrak{A}_1 \\subseteq \\mathfrak{A}_2 \\subseteq \\mathcal{F} \\Rightarrow \\mathbb{E}\\big( \\mathbb{E}(\\xi \\mid \\mathfrak{A}_1) \\mid \\mathfrak{A}_2 \\big) = \\mathbb{E}\\big( \\mathbb{E}(\\xi \\mid \\mathfrak{A}_2) \\mid \\mathfrak{A}_1 \\big) = \\mathbb{E}(\\xi \\mid \\mathfrak{A}_1)$<br>5°. $\\mathbb{D}\\xi = \\mathbb{E}\\big( \\mathbb{D}(\\xi \\mid \\mathfrak{A}) \\big) + \\mathbb{D}\\big( \\mathbb{E}(\\xi \\mid \\mathfrak{A}) \\big)$  <br>   - $\\mathbb{D}(\\xi \\mid \\mathfrak{A}) = \\mathbb{E}\\big( (\\xi - \\mathbb{E}(\\xi \\mid \\mathfrak{A}))^2 \\mid \\mathfrak{A} \\big) = \\mathbb{E}(\\xi^2 \\mid \\mathfrak{A}) - \\mathbb{E}(\\xi \\mid \\mathfrak{A})^2$"
-  },
-  {
-    q: "55. Определение условной вероятности события A при условии σ-алгебры событий и ее специальные свойства.",
-    a: "$$<br>\\mathbb{P}(B \\mid \\mathfrak{A}) = \\mathbb{E}(\\mathbf{1}_B \\mid \\mathfrak{A})<br>$$<br>- Аналогично, $\\mathbb{P}(B) = \\int_B d\\mathbb{P} = \\mathbb{E}\\mathbf{1}_B$<br>- $(ii) \\iff \\mathbb{P}(AB) = \\int_A \\mathbb{P}(B \\mid \\mathfrak{A}) \\, d\\mathbb{P}, \\quad \\forall A \\in \\mathfrak{A},\\; B \\in \\mathcal{F}$<br>- При $A = \\Omega \\Rightarrow \\mathbb{P}(B) = \\int_\\Omega \\mathbb{P}(B \\mid \\mathfrak{A}) \\, d\\mathbb{P} = \\mathbb{E}\\big( \\mathbb{P}(B \\mid \\mathfrak{A}) \\big)$ — <strong>ФПВ</strong> (формула полной вероятности)"
-  },
-  {
-    q: "56. Неравенство Гельдера для мат. ожиданий.",
-    a: "Если $\\mathbb{E}|\\xi|^r &lt; \\infty$, $\\mathbb{E}|\\eta|^s &lt; \\infty$; $r, s &gt; 1$: $\\frac{1}{r} + \\frac{1}{s} = 1$ $\\Rightarrow$$$<br>\\mathbb{E}|\\xi\\eta| \\leq \\left( \\mathbb{E}|\\xi|^r \\right)^{1/r} \\left( \\mathbb{E}|\\eta|^s \\right)^{1/s}<br>$$"
-  },
-  {
-    q: "57. Неравенство Минковского для мат. ожиданий.",
-    a: "Если $\\mathbb{E}|\\xi|^r &lt; \\infty$, $\\mathbb{E}|\\eta|^r &lt; \\infty$; $r \\geq 1$ $\\Rightarrow$<br><br>$$<br>\\left( \\mathbb{E}|\\xi + \\eta|^r \\right)^{1/r} \\leq \\left( \\mathbb{E}|\\xi|^r \\right)^{1/r} + \\left( \\mathbb{E}|\\eta|^r \\right)^{1/r}<br>$$"
-  },
-  {
-    q: "58. Неравенство Йенсена для мат. ожиданий.",
-    a: "Если $g$ — выпуклая (вниз) функция; $\\mathbb{E}|g(\\xi)| &lt; \\infty$ $\\Rightarrow$<br>$$<br>\\mathbb{E}g(\\xi) \\geq g(\\mathbb{E}\\xi)<br>$$"
-  },
-  {
-    q: "59. Неравенство Ляпунова для мат. ожиданий.",
-    a: "Если $a &gt; b &gt; 0$; $\\mathbb{E}|\\xi|^a &lt; \\infty$ $\\Rightarrow$$$<br>\\left( \\mathbb{E}|\\xi|^b \\right)^{1/b} \\leq \\left( \\mathbb{E}|\\xi|^a \\right)^{1/a}<br>$$"
-  },
-  {
-    q: "60. Центральная предельна теорема Линдеберга.",
-    a: "Пусть $\\{\\xi_i\\}_{i \\in \\mathbb{N}}$ — последовательность <strong>независимых случайных величин (НСВ)</strong>:<br>$\\mathbb{E}\\xi_i = a_i$, $\\mathbb{D}\\xi_i = \\sigma_i^2 &lt; \\infty$ для всех $i \\in \\mathbb{N}$, и выполнено <strong>условие Линкинг парка</strong>:$$<br>\\forall \\varepsilon &gt; 0, \\quad \\lim_{n \\to \\infty} \\frac{1}{\\sum_{i=1}^{n} \\sigma_i^2} \\sum_{i=1}^{n} \\mathbb{E}\\left( (\\xi_i - a_i)^2 \\cdot \\mathbf{1}_{\\{|\\xi_i - a_i| &gt; \\varepsilon\\}} \\right) = 0<br>$$Тогда$$<br>\\frac{\\sum_{i=1}^{n} \\xi_i - \\sum_{i=1}^{n} a_i}{\\sqrt{\\sum_{i=1}^{n} \\sigma_i^2}} \\xrightarrow[n \\to \\infty]{\\mathcal{D}} \\mathcal{N}(0, 1)<br>$$"
-  }
-]
+    "Линейная регрессия": [
+      {
+        q: "17. Линейная регрессионная модель: ковариаты, регрессоры, оценка МНК, теорема Гаусса–Маркова",
+        a: "<strong>TL;DR:</strong> $E_\\theta(Y\\mid z) = X'\\beta$, $\\text{Var}(e) = \\sigma^2 I$; МНК: $\\hat\\beta = (XX')^{-1}XY$; $s^2 = SS_e/(n-r)$; Гаусс–Марков: МНК-оценка ДНО функции — НРМД в классе линейных несмещённых.<br><br><strong>Формально:</strong><br><strong>Статистическая модель:</strong> $Y = X'\\beta + e$, $E_\\theta e = 0$, $\\text{Var}_\\theta e = \\sigma^2 I$.<br><strong>МНК:</strong> $\\hat\\beta = (XX')^{-1}XY$ (из нормальных уравнений $XX'\\beta = XY$). Несмещённая оценка $\\sigma^2$: $s^2 = SS_e/(n-r)$, $SS_e = \\|Y - X'\\hat\\beta\\|^2$, $r = \\text{rk}(X)$.<br><strong>ДНО функция:</strong> $\\psi = C'\\beta$ допускает несмещённое оценивание (ДНО) $\\Leftrightarrow$ $C' = AX'$ для некоторой $A$; оценка $\\hat\\psi = C'\\hat\\beta$.<br><strong>Теорема (Гаусса–Маркова).</strong> В модели линейной регрессии любая ДНО-функция параметра $\\psi = C'\\beta$ имеет НРМД-оценку $$\\hat\\psi = C'\\hat\\beta$$ (единственную в классе линейных несмещённых). Доказательство не требует нормальности ошибок."
+      },
+      {
+        q: "18. Доверительное оценивание параметров линейной регрессии. Теорема о распределениях",
+        a: "<strong>TL;DR:</strong> При $e \\sim \\mathcal{N}(0,\\sigma^2 I)$: $\\hat\\psi \\sim \\mathcal{N}(\\psi, \\sigma^2 B)$, $(n-r)s^2/\\sigma^2 \\sim \\chi^2_{n-r}$, независимы. ДИ для скалярной $\\psi$: $\\hat\\psi \\pm x_\\alpha s\\sqrt{b}$.<br><br><strong>Формально:</strong><br><strong>Классические предположения:</strong> $Y \\sim \\mathcal{N}(X'\\beta, \\sigma^2 I)$ (эквивалентно: $e \\sim \\mathcal{N}(0,\\sigma^2 I)$).<br><strong>Теорема (Доверительного оценивания).</strong> Оценка $\\hat\\psi$ имеет $\\mathcal{N}(\\psi, \\Gamma_{\\hat\\psi})$-распределение и не зависит от $SS_e/\\sigma^2 \\sim \\chi^2_{n-r}$. Здесь $\\Gamma_{\\hat\\psi} = \\sigma^2 C'(XX')^{-1}C = \\sigma^2 B$.<br>Для скалярной ДНО функции $\\psi = C'\\beta$ ($q=1$): $b = C'(XX')^{-1}C$, $(\\hat\\psi - \\psi)/(s\\sqrt{b}) \\sim S_{n-r}$. <strong>ДИ уровня $1-\\alpha$:</strong> $$\\psi = \\hat\\psi \\pm x_\\alpha s\\sqrt{b},$$ $x_\\alpha : S_{n-r}(x_\\alpha) = 1-\\alpha/2$."
+      },
+      {
+        q: "19. Доверительный эллипсоид и совместные доверительные интервалы в линейной регрессии",
+        a: "<strong>TL;DR:</strong> $(\\hat\\psi - \\psi)'B^{-1}(\\hat\\psi - \\psi)/(qs^2) \\sim F_{q,n-r}$; эллипсоид $A_\\alpha$; метод Шеффе даёт совместные ДИ.<br><br><strong>Формально:</strong><br>Из $\\hat\\psi \\sim \\mathcal{N}(\\psi, \\sigma^2 B)$ и независимости от $s^2$: $$\\frac{(\\hat\\psi - \\psi)'B^{-1}(\\hat\\psi - \\psi)}{qs^2} \\sim F_{q,n-r}.$$ <strong>Доверительный эллипсоид уровня $1-\\alpha$:</strong> $$A_\\alpha = \\{x : (x - \\hat\\psi)'B^{-1}(x - \\hat\\psi) \\leq qs^2 x_\\alpha\\},$$ $x_\\alpha : F_{q,n-r}(x_\\alpha) = 1-\\alpha$.<br><strong>Метод Шеффе (совместные ДИ).</strong> Для $q$-мерного пространства $L_q$ ДНО-функций: $$\\mathbb{P}_\\theta(\\hat\\psi - x_\\alpha\\hat\\sigma_{\\hat\\psi} \\leq \\psi \\leq \\hat\\psi + x_\\alpha\\hat\\sigma_{\\hat\\psi},\\ \\forall\\psi\\in L_q) = 1-\\alpha,$$ где $x_\\alpha = (qt_\\alpha)^{1/2}$, $t_\\alpha$ — квантиль $F_{q,n-r}$.<br><strong>Метод Бонферрони:</strong> уровень $1-\\alpha/q$ для каждого из $q$ интервалов."
+      },
+      {
+        q: "20. Проверка гипотез в линейной регрессии. F-критерий. Две формы статистики",
+        a: "<strong>TL;DR:</strong> $H_0 : \\psi = 0$; $\\mathbb{F} = \\hat\\psi'B^{-1}\\hat\\psi/(qs^2) = SS_H/q\\,/\\,SS_e/(n-r) \\sim F_{q,n-r}$ при $H_0$; при альтернативе — нецентральное $F$.<br><br><strong>Формально:</strong><br>ДНО функция параметра $\\psi = C'\\beta$; гипотеза $H_0 : \\psi = 0$.<br><strong>F-статистика (две формы):</strong> $$\\mathbb{F} = \\frac{\\hat\\psi'B^{-1}\\hat\\psi}{qs^2} = \\frac{SS_H/q}{SS_e/(n-r)},$$ где $SS_H = SS(\\hat\\beta_H) - SS(\\hat\\beta)$ (прирост суммы квадратов от ограничения $\\psi=0$), $SS_e = SS(\\hat\\beta) = s^2(n-r)$.<br><strong>Распределение при $H_0$:</strong> $\\mathbb{F} \\sim F_{q,n-r}$.<br><strong>Распределение при альтернативе</strong> $\\psi = \\psi_0$: нецентральное $F_{\\nu,q,n-r}$, $\\nu_{nc} = \\psi_0'B^{-1}\\psi_0/s^2$.<br><strong>Мощность:</strong> $\\text{pwr}(\\nu_{nc}) = 1 - F_{\\nu_{nc},q,n-r}(x_\\alpha)$."
+      }
+    ],
+    "Дисперсионный анализ (ANOVA)": [
+      {
+        q: "21. Однофакторная ANOVA: модель, параметризация через главные эффекты",
+        a: "<strong>TL;DR:</strong> $E(Y_{ij}) = \\eta_i = \\mu + \\alpha_i$, $\\sum v_i\\alpha_i = 0$; оценки $\\hat\\eta_i = \\bar Y_{i+}$.<br><br><strong>Формально:</strong><br><strong>Модель:</strong> $E_\\theta Y_{ij} = \\eta_i$, $j = 1,\\ldots,n_i$, $i = 1,\\ldots,d$; $Y_{ij} \\sim \\mathcal{N}(\\eta_i, \\sigma^2)$ независимые.<br>Оценка: $\\hat\\eta_i = \\bar Y_{i+} = \\sum_j Y_{ij}/n_i$; $\\hat\\eta_1,\\ldots,\\hat\\eta_d$ независимы, $D\\hat\\eta_i = \\sigma^2/n_i$.<br><strong>Параметризация через сравнения.</strong> Выбираем веса $\\{v_i\\} : v_i\\geq 0$, $\\sum v_i = 1$: $$\\eta_i = \\mu + \\alpha_i, \\quad \\alpha_* = \\sum_{i=1}^d v_i\\alpha_i = 0,$$ где $\\mu = \\eta_* = \\sum v_i\\eta_i$ — взвешенное среднее; $\\alpha_i = \\eta_i - \\eta_*$ — <em>главные эффекты</em>.<br><strong>Гипотеза однородности:</strong> $$H_0 : \\eta_1 = \\ldots = \\eta_d \\quad\\Leftrightarrow\\quad H_0 : \\alpha_1 = \\ldots = \\alpha_d = 0.$$"
+      },
+      {
+        q: "22. Однофакторная ANOVA: F-критерий, ANOVA-таблица, метод Шеффе",
+        a: "<strong>TL;DR:</strong> $\\mathbb{F} = SS_H/(d-1)\\,/\\,SS_e/(n-d) \\sim F_{d-1,n-d}$ при $H_0$; Шеффе даёт совместные ДИ для всех сравнений.<br><br><strong>Формально:</strong><br><strong>Статистика F-критерия:</strong> $$\\mathbb{F} = \\frac{SS_H/(d-1)}{SS_e/(n-d)},$$ где $SS_H = \\sum_i n_i(\\bar Y_{i+} - \\bar Y_{++})^2$ (между группами), $SS_e = \\sum_{i,j}(Y_{ij} - \\bar Y_{i+})^2$ (внутри групп). При $H_0$: $\\mathbb{F} \\sim F_{d-1,n-d}$; при альтернативе — нецентральное $F$ с $\\nu = \\sum n_i(\\eta_i - \\bar\\eta)^2$.<br>ANOVA-таблица: SS между ($d-1$ ст.св.) + SS внутри ($n-d$) = SS общая ($n-1$).<br><strong>Метод Шеффе.</strong> Совместные ДИ уровня $1-\\alpha$ для всех сравнений $\\psi = \\sum c_i\\eta_i$ ($\\sum c_i = 0$): $$[\\hat\\psi \\pm \\sqrt{x_\\alpha(d-1)}\\,\\hat\\sigma_{\\hat\\psi}],$$ $x_\\alpha : F_{d-1,n-d}(x_\\alpha) = 1-\\alpha$."
+      },
+      {
+        q: "23. Двухфакторная ANOVA: модель, параметризация через главные эффекты и взаимодействия",
+        a: "<strong>TL;DR:</strong> $\\eta_{ij} = \\mu + \\alpha_i^{(1)} + \\alpha_j^{(2)} + \\alpha_{ij}^{(12)}}$; ограничения: $\\alpha_{i*}^{(12)} = 0$, $\\alpha_{*j}^{(12)} = 0$; аддитивная модель при $\\alpha_{ij}^{(12)} = 0$.<br><br><strong>Формально:</strong><br><strong>Модель:</strong> $E(Y_{ijk}) = \\eta_{ij}$, $i=1,\\ldots,d_1$, $j=1,\\ldots,d_2$, $k=1,\\ldots,n_{ij}$; $Y_{ijk} \\sim \\mathcal{N}(\\eta_{ij},\\sigma^2)$.<br><strong>Параметризация.</strong> Веса $\\{v_i\\} : \\sum v_i=1$, $\\{w_j\\} : \\sum w_j=1$: $$\\eta_{ij} = \\mu + \\alpha_i^{(1)} + \\alpha_j^{(2)} + \\alpha_{ij}^{(12)},$$ где $\\mu = \\eta_{**}$; $\\alpha_i^{(1)} = \\eta_{i*} - \\eta_{**}$ — главные эффекты фактора 1; $\\alpha_j^{(2)} = \\eta_{*j} - \\eta_{**}$; $\\alpha_{ij}^{(12)} = \\eta_{ij} - \\eta_{i*} - \\eta_{*j} + \\eta_{**}$ — взаимодействия.<br><strong>Ограничения:</strong> $\\sum v_i\\alpha_i^{(1)}=0$; $\\sum w_j\\alpha_j^{(2)}=0$; $\\alpha_{i*}^{(12)}=0\\ \\forall i$; $\\alpha_{*j}^{(12)}=0\\ \\forall j$.<br><strong>Аддитивная модель</strong> при $H_{(12)} : \\alpha_{ij}^{(12)}=0$: $\\eta_{ij} = \\mu + \\alpha_i^{(1)} + \\alpha_j^{(2)}$, размерность $d_1+d_2-1$."
+      },
+      {
+        q: "24. Двухфакторная ANOVA: гипотезы, F-критерии, порядок проверки",
+        a: "<strong>TL;DR:</strong> Сначала $H_{(12)}$ (взаимодействия), потом $H_{(1)}, H_{(2)}$. $F \\sim F_{(d_1-1)(d_2-1),\\,n-d_1 d_2}$ для $H_{(12)}$. При $n_{ij}=1$ проверить $H_{(12)}$ невозможно.<br><br><strong>Формально:</strong><br><strong>Три гипотезы:</strong><br>$H_{(12)} : \\alpha_{ij}^{(12)} = 0\\ \\forall i,j$ — нет взаимодействий; число ст.св. $(d_1-1)(d_2-1)$.<br>$H_{(1)} : \\alpha_i^{(1)} = 0\\ \\forall i$ — нет влияния фактора 1; ст.св. $d_1-1$.<br>$H_{(2)} : \\alpha_j^{(2)} = 0\\ \\forall j$ — нет влияния фактора 2; ст.св. $d_2-1$.<br>Для проверки $H_{(12)}$ используют $\\mathbb{F}$-критерий: $$\\mathbb{F} \\sim F_{(d_1-1)(d_2-1),\\,n-d_1 d_2}\\text{ при }H_{(12)}.$$ При $n_{ij}=1$ проверка $H_{(12)}$ невозможна.<br><strong>Иерархия гипотез:</strong> 1) сначала $H_{(12)}$ (аддитивность); 2) при выполнении $H_{(12)}$ — $H_{(1)}$; 3) при $H_{(12)},H_{(1)},H_{(2)}$ — нет влияния обоих факторов. Без $H_{(12)}$ интерпретация $H_{(1)},H_{(2)}$ зависит от весов."
+      }
+    ]
   };
-
-  
 
   // Автоматически создаём группу "all"
   cardGroups.all = Object.keys(cardGroups)
@@ -449,7 +282,6 @@ document.addEventListener('click', (e) => {
   let currentIndex = 0;
   let correctCount = 0;
 
-  // Перемешивание
   function shuffle(array) {
     const arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -464,27 +296,19 @@ document.addEventListener('click', (e) => {
     document.getElementById(screenId).classList.add('active');
   }
 
-  // Сохраняем прогресс
   function saveProgress() {
-    const data = {
-      cards: currentCards,
-      index: currentIndex,
-      correct: correctCount
-    };
-    localStorage.setItem('prob-cards-session', JSON.stringify(data));
+    const data = { cards: currentCards, index: currentIndex, correct: correctCount };
+    localStorage.setItem('stat-cards-session', JSON.stringify(data));
   }
 
-  // Загружаем прогресс
   function loadProgress() {
-    const saved = localStorage.getItem('prob-cards-session');
+    const saved = localStorage.getItem('stat-cards-session');
     if (!saved) return false;
-
     try {
       const data = JSON.parse(saved);
       currentCards = data.cards;
       currentIndex = data.index;
       correctCount = data.correct;
-
       if (currentCards.length > 0 && currentIndex < currentCards.length) {
         showScreen('screen-card');
         updateProgress();
@@ -500,13 +324,10 @@ document.addEventListener('click', (e) => {
   function startSession(topicKey) {
     const rawCards = cardGroups[topicKey] || [];
     if (rawCards.length === 0) return;
-
-    // Новая сессия — сбрасываем сохранённую
     currentCards = shuffle(rawCards);
     currentIndex = 0;
     correctCount = 0;
     saveProgress();
-
     showScreen('screen-card');
     updateProgress();
     showCard();
@@ -514,7 +335,7 @@ document.addEventListener('click', (e) => {
 
   function updateProgress() {
     const total = currentCards.length;
-    const current = currentIndex + 1; // человек считает с 1
+    const current = currentIndex + 1;
     document.getElementById('progress').textContent = `Вопрос ${current} из ${total}`;
   }
 
@@ -523,12 +344,10 @@ document.addEventListener('click', (e) => {
       showSummary();
       return;
     }
-
     const card = currentCards[currentIndex];
     document.getElementById('question').textContent = card.q;
     document.getElementById('answer').innerHTML = '';
     document.getElementById('answer').style.display = 'none';
-
     MathJax.typesetClear();
     MathJax.typeset();
   }
@@ -545,22 +364,18 @@ document.addEventListener('click', (e) => {
     }
   }
 
- function handleResponse(isCorrect) {
+  function handleResponse(isCorrect) {
     if (isCorrect) {
       correctCount++;
-
-      // Находим карточку
       const cardEl = document.querySelector('.card');
       if (cardEl) {
         const cardRect = cardEl.getBoundingClientRect();
-
-        // Создаём сообщение
         const message = document.createElement('div');
         message.textContent = "Дальше меньше, братишка. Только назад!";
         message.style.cssText = `
           position: fixed;
           left: ${cardRect.left + cardRect.width / 2}px;
-          top: ${cardRect.top - 20 }px;
+          top: ${cardRect.top - 20}px;
           transform: translateX(-50%);
           background: #34c759;
           color: white;
@@ -575,20 +390,15 @@ document.addEventListener('click', (e) => {
           pointer-events: none;
         `;
         document.body.appendChild(message);
-        setTimeout(() => {
-          if (message.parentNode) message.parentNode.removeChild(message);
-        }, 2000);
+        setTimeout(() => { if (message.parentNode) message.parentNode.removeChild(message); }, 2000);
       }
     } else {
-      // Анимация пуляющей какашки при неправильном ответе
       const poop = document.createElement('div');
       poop.className = 'poop';
       poop.innerHTML = '💩';
       const cardRect = document.querySelector('.card').getBoundingClientRect();
-      const x = cardRect.left + cardRect.width / 2;
-      const y = cardRect.top + cardRect.height / 2;
-      poop.style.left = `${x}px`;
-      poop.style.top = `${y}px`;
+      poop.style.left = `${cardRect.left + cardRect.width / 2}px`;
+      poop.style.top  = `${cardRect.top  + cardRect.height / 2}px`;
       document.body.appendChild(poop);
       setTimeout(() => poop.remove(), 1200);
     }
@@ -612,23 +422,19 @@ document.addEventListener('click', (e) => {
       Это <strong>${percent}%</strong>!
     `;
     showScreen('screen-summary');
-    // Очистим прогресс после завершения
-    localStorage.removeItem('prob-cards-session');
+    localStorage.removeItem('stat-cards-session');
   }
 
   function resetSession() {
-    localStorage.removeItem('prob-cards-session');
+    localStorage.removeItem('stat-cards-session');
     currentCards = [];
     currentIndex = 0;
     correctCount = 0;
     showScreen('screen-select');
   }
 
-  // === При загрузке страницы ===
   window.onload = () => {
-    // Пытаемся восстановить сессию
     if (!loadProgress()) {
-      // Если нет — показываем выбор темы
       showScreen('screen-select');
     }
   };
